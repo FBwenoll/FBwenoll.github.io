@@ -1,27 +1,22 @@
-<!doctype html>
-<html lang="en-us">
-  <head>
-    <title>如何创建自己的博客  Hugo框架为例 // 博闻的世界</title>
-    <link rel="shortcut icon" href="/favicon.ico" />
-    <meta charset="utf-8" />
-    <meta name="generator" content="Hugo 0.109.0">
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="author" content="John Doe" />
-    <meta name="description" content="" />
-    <link rel="stylesheet" href="/css/main.min.3c3c186cd62e563ad6e2f00a89dbee656ab912d1d46f856b5605dd0232521e2a.css" />
+<!DOCTYPE html>
+<html><head>
+<title>如何创建自己的博客  Hugo框架为例</title>
 
-    
-    <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="如何创建自己的博客  Hugo框架为例"/>
-<meta name="twitter:description" content="该方式适用于Ubuntu系统，Windows/Macos类似
-安装Brew 首先需要确保已经安装git sudo apt-get install build-essential curl file git git clone安装brew git clone https://github.com/Homebrew/brew ~/.linuxbrew/Homebrew mkdir ~/.linuxbrew/bin ln -s ~/.linuxbrew/Homebrew/bin/brew ~/.linuxbrew/bin eval $(~/.linuxbrew/bin/brew shellenv) 运行brew即可完成安装 安装hugo 通过brew安装hugo brew install hugo 安装完成后可通过hugo version验证是否安装成功 hugo v0.109.0&#43;extended linux/amd64 BuildDate=unknown 初始化hugo博客 创建hugo根目录 hugo new site blog 其中，blog为博客根目录的文件夹名称。
-当终端中出现congratulations字眼时，说明创建成功。
-下载hugo主题，通过主题内的git clone进行安装 cd blog git clone git clone https://github.com/vaga/hugo-theme-m10c.git themes/m10c 下载完成后即可在/blog/themes/中看到下载的主题
-本地启动hugo博客进行测试 hugo server -t m10c --buildDrafts m10c为需要启用的主题 启动后即可通过本地地址访问博客
-创建博客文章 hugo博客一般通过markdown格式进行编写
-在post目录下创建一篇名为myblog的博客 hugo new post/myblog.md 创建完成后在blog/content/post即可看到myblog."/>
 
-    <meta property="og:title" content="如何创建自己的博客  Hugo框架为例" />
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+<meta property="og:title" content="如何创建自己的博客  Hugo框架为例" />
 <meta property="og:description" content="该方式适用于Ubuntu系统，Windows/Macos类似
 安装Brew 首先需要确保已经安装git sudo apt-get install build-essential curl file git git clone安装brew git clone https://github.com/Homebrew/brew ~/.linuxbrew/Homebrew mkdir ~/.linuxbrew/bin ln -s ~/.linuxbrew/Homebrew/bin/brew ~/.linuxbrew/bin eval $(~/.linuxbrew/bin/brew shellenv) 运行brew即可完成安装 安装hugo 通过brew安装hugo brew install hugo 安装完成后可通过hugo version验证是否安装成功 hugo v0.109.0&#43;extended linux/amd64 BuildDate=unknown 初始化hugo博客 创建hugo根目录 hugo new site blog 其中，blog为博客根目录的文件夹名称。
 当终端中出现congratulations字眼时，说明创建成功。
@@ -35,43 +30,373 @@
 <meta property="article:modified_time" content="2023-01-12T13:21:07+08:00" /><meta property="og:site_name" content="My Blog" />
 
 
-  </head>
-  <body>
-    <header class="app-header">
-      <a href="https://FBwenoll.github.io"><img class="app-header-avatar" src="/avatar.jpg" alt="John Doe" /></a>
-      <span class="app-header-title">博闻的世界</span>
-      <nav class="app-header-menu">
-          <a class="app-header-menu-item" href="/categories">分类</a>
-             - 
-          
-          <a class="app-header-menu-item" href="/tags">标签</a>
-      </nav>
-      <p>My HomePage Description</p>
-    </header>
-    <main class="app-container">
-      
-  <article class="post">
-    <header class="post-header">
-      <h1 class ="post-title">如何创建自己的博客  Hugo框架为例</h1>
-      <div class="post-meta">
-        <div>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-calendar">
-  <title>calendar</title>
-  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line>
-</svg>
-          Jan 12, 2023
+
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="如何创建自己的博客  Hugo框架为例"/>
+<meta name="twitter:description" content="该方式适用于Ubuntu系统，Windows/Macos类似
+安装Brew 首先需要确保已经安装git sudo apt-get install build-essential curl file git git clone安装brew git clone https://github.com/Homebrew/brew ~/.linuxbrew/Homebrew mkdir ~/.linuxbrew/bin ln -s ~/.linuxbrew/Homebrew/bin/brew ~/.linuxbrew/bin eval $(~/.linuxbrew/bin/brew shellenv) 运行brew即可完成安装 安装hugo 通过brew安装hugo brew install hugo 安装完成后可通过hugo version验证是否安装成功 hugo v0.109.0&#43;extended linux/amd64 BuildDate=unknown 初始化hugo博客 创建hugo根目录 hugo new site blog 其中，blog为博客根目录的文件夹名称。
+当终端中出现congratulations字眼时，说明创建成功。
+下载hugo主题，通过主题内的git clone进行安装 cd blog git clone git clone https://github.com/vaga/hugo-theme-m10c.git themes/m10c 下载完成后即可在/blog/themes/中看到下载的主题
+本地启动hugo博客进行测试 hugo server -t m10c --buildDrafts m10c为需要启用的主题 启动后即可通过本地地址访问博客
+创建博客文章 hugo博客一般通过markdown格式进行编写
+在post目录下创建一篇名为myblog的博客 hugo new post/myblog.md 创建完成后在blog/content/post即可看到myblog."/>
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+      <script src="/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+<link rel="stylesheet" href="/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
+
+
+
+<link rel="stylesheet" href="/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
+
+
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script src="/vendor/js/md5.min.js"></script><script>
+  var gitalk = new Gitalk({
+  clientID: 'your client id',
+  clientSecret: 'your client secret',
+  repo: 'repo name',
+  owner: 'user',
+  admin: ['user'],
+  id: md5(location.pathname),
+  distractionFreeMode: 'false'
+  });
+  window.onload = function () {
+        gitalk.render('gitalk-container')
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://FBwenoll.github.io">
+    
+        <div class="nav-title">
+            博闻的世界
         </div>
-        <div>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-clock">
-  <title>clock</title>
-  <circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>
-</svg>
-          1 min read
+        
+        <div class="nav-subtitle">
+            FBwenoll&#39;s Blog.
         </div>
-      </div>
-    </header>
-    <div class="post-content">
-      <p><strong>该方式适用于Ubuntu系统，Windows/Macos类似</strong></p>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/categories">
+                分类
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/tags">
+                标签
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	2023 FuBowen
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    
+    
+    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%ae%89%e8%a3%85brew" onclick="onNavClick(`#安装brew-nav`)" id="安装brew-nav">
+									安装Brew
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%ae%89%e8%a3%85hugo" onclick="onNavClick(`#安装hugo-nav`)" id="安装hugo-nav">
+									安装hugo
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%88%9d%e5%a7%8b%e5%8c%96hugo%e5%8d%9a%e5%ae%a2" onclick="onNavClick(`#初始化hugo博客-nav`)" id="初始化hugo博客-nav">
+									初始化hugo博客
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%88%9b%e5%bb%ba%e5%8d%9a%e5%ae%a2%e6%96%87%e7%ab%a0" onclick="onNavClick(`#创建博客文章-nav`)" id="创建博客文章-nav">
+									创建博客文章
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e9%83%a8%e7%bd%b2%e8%87%b3github%e4%bb%93%e5%ba%93" onclick="onNavClick(`#部署至github仓库-nav`)" id="部署至github仓库-nav">
+									部署至github仓库
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+    
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+<div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/categories">
+                    分类
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/tags">
+                    标签
+                </a>
+                
+            
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://FBwenoll.github.io">
+            博闻的世界
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://FBwenoll.github.io">
+        <div class="single-column-header-title">博闻的世界</div>
+        
+        <div class="single-column-header-subtitle">FBwenoll&#39;s Blog.</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+
+            <div class="post-head-wrapper-text-only"
+                
+            >
+                <div class="post-title">
+                    如何创建自己的博客  Hugo框架为例
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2023-01-12 13:21
+                        </time>
+                        
+
+                        
+
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <p><strong>该方式适用于Ubuntu系统，Windows/Macos类似</strong></p>
 <h2 id="安装brew">安装Brew</h2>
 <ul>
 <li>首先需要确保已经安装git</li>
@@ -167,12 +492,60 @@
 <li>再次尝试<code>git push</code>即可成功</li>
 </ul>
 
-    </div>
-    <div class="post-footer">
-      
-    </div>
-  </article>
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">最后修改于 2023-01-12</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
 
-    </main>
-  </body>
+                
+                <a class="newer-posts">
+			下回<br>已经到头啦。
+                </a>
+                
+                
+                
+                <a class="older-posts" href="/post/%E9%80%9A%E8%BF%87vscode-remote-wsl%E6%90%AD%E5%BB%BAlinux-c-%E7%8E%AF%E5%A2%83/">
+			上回<br>通过VsCode Remote WSL搭建linux C 环境
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+<div id="gitalk-container"></div>
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	2023 FuBowen
+	
+</div>
+            </div>
+    
+    <script src="/js/journal.js"></script></body>
 </html>

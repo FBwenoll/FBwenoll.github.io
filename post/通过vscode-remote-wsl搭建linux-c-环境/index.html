@@ -1,21 +1,22 @@
-<!doctype html>
-<html lang="en-us">
-  <head>
-    <title>通过VsCode Remote WSL搭建linux C 环境 // 博闻的世界</title>
-    <link rel="shortcut icon" href="/favicon.ico" />
-    <meta charset="utf-8" />
-    <meta name="generator" content="Hugo 0.109.0">
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="author" content="John Doe" />
-    <meta name="description" content="" />
-    <link rel="stylesheet" href="/css/main.min.3c3c186cd62e563ad6e2f00a89dbee656ab912d1d46f856b5605dd0232521e2a.css" />
+<!DOCTYPE html>
+<html><head>
+<title>通过VsCode Remote WSL搭建linux C 环境</title>
 
-    
-    <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="通过VsCode Remote WSL搭建linux C 环境"/>
-<meta name="twitter:description" content="安装编译工具链 安装编译工具 sudo apt update sudo apt-get install build-essential gbd sudo apt-get install cmake 验证是否安装成功 gcc --version g&#43;&#43; --version gbd --version cmake--version 安装Vscode插件 首先通过remote_wsl连接WSL2 在连接WSL的状态下安装C&#43;&#43;、Cmake、CmakeTools等一系列工具 创建工程 创建如下目录 Projects └── Demo ├── include │ └── HelloWorld.h ├── main.cpp └── src └── HelloWorld.cpp 其中Projects为工作空间，Demo为项目 F5选择工具链即可进行编译运行,但此时会报错，因为此时我们没有告诉vscode如何编译和调试程序 更改Tasks.json 通过ctrl&#43;shift&#43;p打开命令窗口，输入Configure Default Build Task，并选择g&#43;&#43;，即可在.vscode文件夹中看到Tasks.json文件。Tasks文件一般用于编译程序。 args数组包含将传递给 g&#43;&#43; 的命令行参数（必须按照编译器预期的顺序指定）。类似于在命令行中运行g&#43;&#43; -g.. -o.. -I..的命令。 -g表示待编译的活动文件，对它进行编译。这里指工作空间/Demo下所有的.cpp文件 -o表示在文件被编译后生成与活动文件同名无后缀的可执行文件${fileDirname}/${fileBasenameNoExtension} -I表示编译程序按照-I指定的路进去搜索头文件。这里指工作空间/Demo/include下所包含的头文件 &#34;args&#34;: [ &#34;-fdiagnostics-color=always&#34;, &#34;-g&#34;, &#34;${workspaceFolder}/Demo/**.cpp&#34;,//编译Demo目录下所有.cpp文件 &#34;${workspaceFolder}/Demo/src/**.cpp&#34;,//编译Demo/src目录下所有.cpp文件 &#34;-o&#34;, &#34;${fileDirname}/${fileBasenameNoExtension}&#34;, //添加如下内容以启用多文件编译 &#34;-I&#34;, &#34;${workspaceFolder}/Demo/include&#34;,//头文件目录 &#34;-pthread&#34; ], 生成launch."/>
 
-    <meta property="og:title" content="通过VsCode Remote WSL搭建linux C 环境" />
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+<meta property="og:title" content="通过VsCode Remote WSL搭建linux C 环境" />
 <meta property="og:description" content="安装编译工具链 安装编译工具 sudo apt update sudo apt-get install build-essential gbd sudo apt-get install cmake 验证是否安装成功 gcc --version g&#43;&#43; --version gbd --version cmake--version 安装Vscode插件 首先通过remote_wsl连接WSL2 在连接WSL的状态下安装C&#43;&#43;、Cmake、CmakeTools等一系列工具 创建工程 创建如下目录 Projects └── Demo ├── include │ └── HelloWorld.h ├── main.cpp └── src └── HelloWorld.cpp 其中Projects为工作空间，Demo为项目 F5选择工具链即可进行编译运行,但此时会报错，因为此时我们没有告诉vscode如何编译和调试程序 更改Tasks.json 通过ctrl&#43;shift&#43;p打开命令窗口，输入Configure Default Build Task，并选择g&#43;&#43;，即可在.vscode文件夹中看到Tasks.json文件。Tasks文件一般用于编译程序。 args数组包含将传递给 g&#43;&#43; 的命令行参数（必须按照编译器预期的顺序指定）。类似于在命令行中运行g&#43;&#43; -g.. -o.. -I..的命令。 -g表示待编译的活动文件，对它进行编译。这里指工作空间/Demo下所有的.cpp文件 -o表示在文件被编译后生成与活动文件同名无后缀的可执行文件${fileDirname}/${fileBasenameNoExtension} -I表示编译程序按照-I指定的路进去搜索头文件。这里指工作空间/Demo/include下所包含的头文件 &#34;args&#34;: [ &#34;-fdiagnostics-color=always&#34;, &#34;-g&#34;, &#34;${workspaceFolder}/Demo/**.cpp&#34;,//编译Demo目录下所有.cpp文件 &#34;${workspaceFolder}/Demo/src/**.cpp&#34;,//编译Demo/src目录下所有.cpp文件 &#34;-o&#34;, &#34;${fileDirname}/${fileBasenameNoExtension}&#34;, //添加如下内容以启用多文件编译 &#34;-I&#34;, &#34;${workspaceFolder}/Demo/include&#34;,//头文件目录 &#34;-pthread&#34; ], 生成launch." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://FBwenoll.github.io/post/%E9%80%9A%E8%BF%87vscode-remote-wsl%E6%90%AD%E5%BB%BAlinux-c-%E7%8E%AF%E5%A2%83/" /><meta property="article:section" content="post" />
@@ -23,43 +24,367 @@
 <meta property="article:modified_time" content="2023-01-12T12:37:05+08:00" /><meta property="og:site_name" content="My Blog" />
 
 
-  </head>
-  <body>
-    <header class="app-header">
-      <a href="https://FBwenoll.github.io"><img class="app-header-avatar" src="/avatar.jpg" alt="John Doe" /></a>
-      <span class="app-header-title">博闻的世界</span>
-      <nav class="app-header-menu">
-          <a class="app-header-menu-item" href="/categories">分类</a>
-             - 
-          
-          <a class="app-header-menu-item" href="/tags">标签</a>
-      </nav>
-      <p>My HomePage Description</p>
-    </header>
-    <main class="app-container">
-      
-  <article class="post">
-    <header class="post-header">
-      <h1 class ="post-title">通过VsCode Remote WSL搭建linux C 环境</h1>
-      <div class="post-meta">
-        <div>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-calendar">
-  <title>calendar</title>
-  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line>
-</svg>
-          Jan 12, 2023
+
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="通过VsCode Remote WSL搭建linux C 环境"/>
+<meta name="twitter:description" content="安装编译工具链 安装编译工具 sudo apt update sudo apt-get install build-essential gbd sudo apt-get install cmake 验证是否安装成功 gcc --version g&#43;&#43; --version gbd --version cmake--version 安装Vscode插件 首先通过remote_wsl连接WSL2 在连接WSL的状态下安装C&#43;&#43;、Cmake、CmakeTools等一系列工具 创建工程 创建如下目录 Projects └── Demo ├── include │ └── HelloWorld.h ├── main.cpp └── src └── HelloWorld.cpp 其中Projects为工作空间，Demo为项目 F5选择工具链即可进行编译运行,但此时会报错，因为此时我们没有告诉vscode如何编译和调试程序 更改Tasks.json 通过ctrl&#43;shift&#43;p打开命令窗口，输入Configure Default Build Task，并选择g&#43;&#43;，即可在.vscode文件夹中看到Tasks.json文件。Tasks文件一般用于编译程序。 args数组包含将传递给 g&#43;&#43; 的命令行参数（必须按照编译器预期的顺序指定）。类似于在命令行中运行g&#43;&#43; -g.. -o.. -I..的命令。 -g表示待编译的活动文件，对它进行编译。这里指工作空间/Demo下所有的.cpp文件 -o表示在文件被编译后生成与活动文件同名无后缀的可执行文件${fileDirname}/${fileBasenameNoExtension} -I表示编译程序按照-I指定的路进去搜索头文件。这里指工作空间/Demo/include下所包含的头文件 &#34;args&#34;: [ &#34;-fdiagnostics-color=always&#34;, &#34;-g&#34;, &#34;${workspaceFolder}/Demo/**.cpp&#34;,//编译Demo目录下所有.cpp文件 &#34;${workspaceFolder}/Demo/src/**.cpp&#34;,//编译Demo/src目录下所有.cpp文件 &#34;-o&#34;, &#34;${fileDirname}/${fileBasenameNoExtension}&#34;, //添加如下内容以启用多文件编译 &#34;-I&#34;, &#34;${workspaceFolder}/Demo/include&#34;,//头文件目录 &#34;-pthread&#34; ], 生成launch."/>
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+      <script src="/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+<link rel="stylesheet" href="/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
+
+
+
+<link rel="stylesheet" href="/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
+
+
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script src="/vendor/js/md5.min.js"></script><script>
+  var gitalk = new Gitalk({
+  clientID: 'your client id',
+  clientSecret: 'your client secret',
+  repo: 'repo name',
+  owner: 'user',
+  admin: ['user'],
+  id: md5(location.pathname),
+  distractionFreeMode: 'false'
+  });
+  window.onload = function () {
+        gitalk.render('gitalk-container')
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://FBwenoll.github.io">
+    
+        <div class="nav-title">
+            博闻的世界
         </div>
-        <div>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-clock">
-  <title>clock</title>
-  <circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>
-</svg>
-          1 min read
+        
+        <div class="nav-subtitle">
+            FBwenoll&#39;s Blog.
         </div>
-      </div>
-    </header>
-    <div class="post-content">
-      <h2 id="安装编译工具链">安装编译工具链</h2>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/categories">
+                分类
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/tags">
+                标签
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	2023 FuBowen
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    
+    
+    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%ae%89%e8%a3%85%e7%bc%96%e8%af%91%e5%b7%a5%e5%85%b7%e9%93%be" onclick="onNavClick(`#安装编译工具链-nav`)" id="安装编译工具链-nav">
+									安装编译工具链
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%ae%89%e8%a3%85vscode%e6%8f%92%e4%bb%b6" onclick="onNavClick(`#安装vscode插件-nav`)" id="安装vscode插件-nav">
+									安装Vscode插件
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%88%9b%e5%bb%ba%e5%b7%a5%e7%a8%8b" onclick="onNavClick(`#创建工程-nav`)" id="创建工程-nav">
+									创建工程
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%9b%b4%e6%94%b9tasksjson" onclick="onNavClick(`#更改tasksjson-nav`)" id="更改tasksjson-nav">
+									更改Tasks.json
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%94%9f%e6%88%90launchjson" onclick="onNavClick(`#生成launchjson-nav`)" id="生成launchjson-nav">
+									生成launch.json
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+    
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+<div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/categories">
+                    分类
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/tags">
+                    标签
+                </a>
+                
+            
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://FBwenoll.github.io">
+            博闻的世界
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://FBwenoll.github.io">
+        <div class="single-column-header-title">博闻的世界</div>
+        
+        <div class="single-column-header-subtitle">FBwenoll&#39;s Blog.</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+
+            <div class="post-head-wrapper-text-only"
+                
+            >
+                <div class="post-title">
+                    通过VsCode Remote WSL搭建linux C 环境
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2023-01-12 12:37
+                        </time>
+                        
+
+                        
+
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <h2 id="安装编译工具链">安装编译工具链</h2>
 <ul>
 <li>安装编译工具</li>
 </ul>
@@ -152,12 +477,60 @@
 <li>点击F5即可进行build &amp; debug</li>
 </ul>
 
-    </div>
-    <div class="post-footer">
-      
-    </div>
-  </article>
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">最后修改于 2023-01-12</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
 
-    </main>
-  </body>
+                
+                <a class="newer-posts" href="/post/%E5%A6%82%E4%BD%95%E5%88%9B%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E5%8D%9A%E5%AE%A2--hugo%E6%A1%86%E6%9E%B6%E4%B8%BA%E4%BE%8B/">
+			下回<br>如何创建自己的博客  Hugo框架为例
+                </a>
+                
+                
+                
+                <a class="older-posts">
+			上回<br>这是最旧的文章了。
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+<div id="gitalk-container"></div>
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	2023 FuBowen
+	
+</div>
+            </div>
+    
+    <script src="/js/journal.js"></script></body>
 </html>
