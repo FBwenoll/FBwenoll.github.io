@@ -1,19 +1,35 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on My New Hugo Site</title>
+    <title>Posts on 博闻的世界</title>
     <link>https://FBwenoll.github.io/post/</link>
-    <description>Recent content in Posts on My New Hugo Site</description>
+    <description>Recent content in Posts on 博闻的世界</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 12 Jan 2023 12:37:05 +0800</lastBuildDate><atom:link href="https://FBwenoll.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>2023 FuBowen</copyright>
+    <lastBuildDate>Thu, 12 Jan 2023 13:21:07 +0800</lastBuildDate><atom:link href="https://FBwenoll.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>如何创建自己的博客  Hugo框架为例</title>
+      <link>https://FBwenoll.github.io/post/%E5%A6%82%E4%BD%95%E5%88%9B%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E5%8D%9A%E5%AE%A2--hugo%E6%A1%86%E6%9E%B6%E4%B8%BA%E4%BE%8B/</link>
+      <pubDate>Thu, 12 Jan 2023 13:21:07 +0800</pubDate>
+      
+      <guid>https://FBwenoll.github.io/post/%E5%A6%82%E4%BD%95%E5%88%9B%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E5%8D%9A%E5%AE%A2--hugo%E6%A1%86%E6%9E%B6%E4%B8%BA%E4%BE%8B/</guid>
+      <description>该方式适用于Ubuntu系统，Windows/Macos类似
+安装Brew 首先需要确保已经安装git sudo apt-get install build-essential curl file git git clone安装brew git clone https://github.com/Homebrew/brew ~/.linuxbrew/Homebrew mkdir ~/.linuxbrew/bin ln -s ~/.linuxbrew/Homebrew/bin/brew ~/.linuxbrew/bin eval $(~/.linuxbrew/bin/brew shellenv) 运行brew即可完成安装 安装hugo 通过brew安装hugo brew install hugo 安装完成后可通过hugo version验证是否安装成功 hugo v0.109.0+extended linux/amd64 BuildDate=unknown 初始化hugo博客 创建hugo根目录 hugo new site blog 其中，blog为博客根目录的文件夹名称。
+当终端中出现congratulations字眼时，说明创建成功。
+下载hugo主题，通过主题内的git clone进行安装 cd blog git clone git clone https://github.com/vaga/hugo-theme-m10c.git themes/m10c 下载完成后即可在/blog/themes/中看到下载的主题
+本地启动hugo博客进行测试 hugo server -t m10c --buildDrafts m10c为需要启用的主题 启动后即可通过本地地址访问博客
+创建博客文章 hugo博客一般通过markdown格式进行编写
+在post目录下创建一篇名为myblog的博客 hugo new post/myblog.md 创建完成后在blog/content/post即可看到myblog.</description>
+    </item>
+    
     <item>
       <title>通过VsCode Remote WSL搭建linux C 环境</title>
       <link>https://FBwenoll.github.io/post/%E9%80%9A%E8%BF%87vscode-remote-wsl%E6%90%AD%E5%BB%BAlinux-c-%E7%8E%AF%E5%A2%83/</link>
       <pubDate>Thu, 12 Jan 2023 12:37:05 +0800</pubDate>
       
       <guid>https://FBwenoll.github.io/post/%E9%80%9A%E8%BF%87vscode-remote-wsl%E6%90%AD%E5%BB%BAlinux-c-%E7%8E%AF%E5%A2%83/</guid>
-      <description>安装编译工具链 安装编译工具 sudo apt update sudo apt-get install build-essential gbd sudo apt-get install cmake 验证是否安装成功 gcc --version g++ --version gbd --version cmake--version 安装Vscode插件 首先通过remote_wsl连接WSL2 在连接WSL的状态下安装C++、Cmake、CmakeTools等一系列工具 创建工程 创建如下目录 Projects └── Demo ├── include │ └── HelloWorld.h ├── main.cpp └── src └── HelloWorld.cpp 其中Projects为工作空间，Demo为项目 F5选择工具链即可进行编译运行,但此时会报错，因为此时我们没有将新建的include&amp;amp;src目录添至includePath中去。 添加includePath 通过ctrl+shift+p打开命令窗口，并输入configuration，即可在.vscode文件夹中看到c_cpp_properties.json以及task.json文件。 在c_cpp_properties.json中includePath内添加工程内头文件所在的文件目录： { &amp;#34;configurations&amp;#34;: [ { &amp;#34;name&amp;#34;: &amp;#34;Linux&amp;#34;, &amp;#34;includePath&amp;#34;: [ &amp;#34;${workspaceFolder}/**&amp;#34;, &amp;#34;${workspaceFolder}/Demo/include&amp;#34;//头文件目录 ] ... } ], &amp;#34;version&amp;#34;:4 } 在task.json文件中args内添加需要编译的cpp文件目录： &amp;#34;args&amp;#34;: [ &amp;#34;-fdiagnostics-color=always&amp;#34;, &amp;#34;-g&amp;#34;, &amp;#34;${workspaceFolder}/Demo/**.cpp&amp;#34;,//编译Demo目录下所有.cpp文件 &amp;#34;${workspaceFolder}/Demo/src/**.cpp&amp;#34;,//编译Demo/src目录下所有.cpp文件 &amp;#34;-o&amp;#34;, &amp;#34;${fileDirname}/${fileBasenameNoExtension}&amp;#34;, //添加如下内容以启用多文件编译 &amp;#34;-I&amp;#34;, &amp;#34;${workspaceFolder}/Demo/include&amp;#34;,//头文件目录 &amp;#34;-pthread&amp;#34; ], </description>
+      <description>安装编译工具链 安装编译工具 sudo apt update sudo apt-get install build-essential gbd sudo apt-get install cmake 验证是否安装成功 gcc --version g++ --version gbd --version cmake--version 安装Vscode插件 首先通过remote_wsl连接WSL2 在连接WSL的状态下安装C++、Cmake、CmakeTools等一系列工具 创建工程 创建如下目录 Projects └── Demo ├── include │ └── HelloWorld.h ├── main.cpp └── src └── HelloWorld.cpp 其中Projects为工作空间，Demo为项目 F5选择工具链即可进行编译运行,但此时会报错，因为此时我们没有告诉vscode如何编译和调试程序 更改Tasks.json 通过ctrl+shift+p打开命令窗口，输入Configure Default Build Task，并选择g++，即可在.vscode文件夹中看到Tasks.json文件。Tasks文件一般用于编译程序。 args数组包含将传递给 g++ 的命令行参数（必须按照编译器预期的顺序指定）。类似于在命令行中运行g++ -g.. -o.. -I..的命令。 -g表示待编译的活动文件，对它进行编译。这里指工作空间/Demo下所有的.cpp文件 -o表示在文件被编译后生成与活动文件同名无后缀的可执行文件${fileDirname}/${fileBasenameNoExtension} -I表示编译程序按照-I指定的路进去搜索头文件。这里指工作空间/Demo/include下所包含的头文件 &amp;#34;args&amp;#34;: [ &amp;#34;-fdiagnostics-color=always&amp;#34;, &amp;#34;-g&amp;#34;, &amp;#34;${workspaceFolder}/Demo/**.cpp&amp;#34;,//编译Demo目录下所有.cpp文件 &amp;#34;${workspaceFolder}/Demo/src/**.cpp&amp;#34;,//编译Demo/src目录下所有.cpp文件 &amp;#34;-o&amp;#34;, &amp;#34;${fileDirname}/${fileBasenameNoExtension}&amp;#34;, //添加如下内容以启用多文件编译 &amp;#34;-I&amp;#34;, &amp;#34;${workspaceFolder}/Demo/include&amp;#34;,//头文件目录 &amp;#34;-pthread&amp;#34; ], 生成launch.</description>
     </item>
     
   </channel>

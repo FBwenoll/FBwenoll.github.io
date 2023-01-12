@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en-us">
+  <head>
+    <title>如何创建自己的博客  Hugo框架为例 // 博闻的世界</title>
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <meta charset="utf-8" />
+    <meta name="generator" content="Hugo 0.109.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="John Doe" />
+    <meta name="description" content="" />
+    <link rel="stylesheet" href="/css/main.min.3c3c186cd62e563ad6e2f00a89dbee656ab912d1d46f856b5605dd0232521e2a.css" />
+
+    
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="如何创建自己的博客  Hugo框架为例"/>
+<meta name="twitter:description" content="该方式适用于Ubuntu系统，Windows/Macos类似
+安装Brew 首先需要确保已经安装git sudo apt-get install build-essential curl file git git clone安装brew git clone https://github.com/Homebrew/brew ~/.linuxbrew/Homebrew mkdir ~/.linuxbrew/bin ln -s ~/.linuxbrew/Homebrew/bin/brew ~/.linuxbrew/bin eval $(~/.linuxbrew/bin/brew shellenv) 运行brew即可完成安装 安装hugo 通过brew安装hugo brew install hugo 安装完成后可通过hugo version验证是否安装成功 hugo v0.109.0&#43;extended linux/amd64 BuildDate=unknown 初始化hugo博客 创建hugo根目录 hugo new site blog 其中，blog为博客根目录的文件夹名称。
+当终端中出现congratulations字眼时，说明创建成功。
+下载hugo主题，通过主题内的git clone进行安装 cd blog git clone git clone https://github.com/vaga/hugo-theme-m10c.git themes/m10c 下载完成后即可在/blog/themes/中看到下载的主题
+本地启动hugo博客进行测试 hugo server -t m10c --buildDrafts m10c为需要启用的主题 启动后即可通过本地地址访问博客
+创建博客文章 hugo博客一般通过markdown格式进行编写
+在post目录下创建一篇名为myblog的博客 hugo new post/myblog.md 创建完成后在blog/content/post即可看到myblog."/>
+
+    <meta property="og:title" content="如何创建自己的博客  Hugo框架为例" />
+<meta property="og:description" content="该方式适用于Ubuntu系统，Windows/Macos类似
+安装Brew 首先需要确保已经安装git sudo apt-get install build-essential curl file git git clone安装brew git clone https://github.com/Homebrew/brew ~/.linuxbrew/Homebrew mkdir ~/.linuxbrew/bin ln -s ~/.linuxbrew/Homebrew/bin/brew ~/.linuxbrew/bin eval $(~/.linuxbrew/bin/brew shellenv) 运行brew即可完成安装 安装hugo 通过brew安装hugo brew install hugo 安装完成后可通过hugo version验证是否安装成功 hugo v0.109.0&#43;extended linux/amd64 BuildDate=unknown 初始化hugo博客 创建hugo根目录 hugo new site blog 其中，blog为博客根目录的文件夹名称。
+当终端中出现congratulations字眼时，说明创建成功。
+下载hugo主题，通过主题内的git clone进行安装 cd blog git clone git clone https://github.com/vaga/hugo-theme-m10c.git themes/m10c 下载完成后即可在/blog/themes/中看到下载的主题
+本地启动hugo博客进行测试 hugo server -t m10c --buildDrafts m10c为需要启用的主题 启动后即可通过本地地址访问博客
+创建博客文章 hugo博客一般通过markdown格式进行编写
+在post目录下创建一篇名为myblog的博客 hugo new post/myblog.md 创建完成后在blog/content/post即可看到myblog." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://FBwenoll.github.io/post/%E5%A6%82%E4%BD%95%E5%88%9B%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E5%8D%9A%E5%AE%A2--hugo%E6%A1%86%E6%9E%B6%E4%B8%BA%E4%BE%8B/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2023-01-12T13:21:07+08:00" />
+<meta property="article:modified_time" content="2023-01-12T13:21:07+08:00" /><meta property="og:site_name" content="My Blog" />
+
+
+  </head>
+  <body>
+    <header class="app-header">
+      <a href="https://FBwenoll.github.io"><img class="app-header-avatar" src="/avatar.jpg" alt="John Doe" /></a>
+      <span class="app-header-title">博闻的世界</span>
+      <nav class="app-header-menu">
+          <a class="app-header-menu-item" href="/categories">分类</a>
+             - 
+          
+          <a class="app-header-menu-item" href="/tags">标签</a>
+      </nav>
+      <p>My HomePage Description</p>
+    </header>
+    <main class="app-container">
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class ="post-title">如何创建自己的博客  Hugo框架为例</h1>
+      <div class="post-meta">
+        <div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-calendar">
+  <title>calendar</title>
+  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line>
+</svg>
+          Jan 12, 2023
+        </div>
+        <div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-clock">
+  <title>clock</title>
+  <circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>
+</svg>
+          1 min read
+        </div>
+      </div>
+    </header>
+    <div class="post-content">
+      <p><strong>该方式适用于Ubuntu系统，Windows/Macos类似</strong></p>
+<h2 id="安装brew">安装Brew</h2>
+<ul>
+<li>首先需要确保已经安装git</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo apt-get install build-essential curl file git
+</span></span></code></pre></div><ul>
+<li>git clone安装brew</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git clone https://github.com/Homebrew/brew ~/.linuxbrew/Homebrew
+</span></span><span style="display:flex;"><span>mkdir ~/.linuxbrew/bin
+</span></span><span style="display:flex;"><span>ln -s ~/.linuxbrew/Homebrew/bin/brew ~/.linuxbrew/bin
+</span></span><span style="display:flex;"><span><span style="color:#658b00">eval</span> <span style="color:#8b008b;font-weight:bold">$(</span>~/.linuxbrew/bin/brew shellenv<span style="color:#8b008b;font-weight:bold">)</span>
+</span></span></code></pre></div><ul>
+<li>运行<code>brew</code>即可完成安装</li>
+</ul>
+<h2 id="安装hugo">安装hugo</h2>
+<ul>
+<li>通过brew安装hugo</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>brew install hugo
+</span></span></code></pre></div><ul>
+<li>安装完成后可通过<code>hugo version</code>验证是否安装成功</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>hugo v0.109.0+extended linux/amd64 <span style="color:#00688b">BuildDate</span>=unknown
+</span></span></code></pre></div><hr>
+<h2 id="初始化hugo博客">初始化hugo博客</h2>
+<ul>
+<li>创建hugo根目录</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>hugo new site blog
+</span></span></code></pre></div><p>其中，blog为博客根目录的文件夹名称。<br>
+当终端中出现<code>congratulations</code>字眼时，说明创建成功。</p>
+<ul>
+<li>下载<a href="https://themes.gohugo.io/">hugo主题</a>，通过主题内的<code>git clone</code>进行安装</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#658b00">cd</span> blog
+</span></span><span style="display:flex;"><span>git clone git clone https://github.com/vaga/hugo-theme-m10c.git themes/m10c
+</span></span></code></pre></div><p>下载完成后即可在<code>/blog/themes/</code>中看到下载的主题</p>
+<ul>
+<li>本地启动hugo博客进行测试</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>hugo server -t m10c --buildDrafts
+</span></span><span style="display:flex;"><span>m10c为需要启用的主题
+</span></span></code></pre></div><p>启动后即可通过<a href="http://localhost:1313/">本地地址</a>访问博客</p>
+<h2 id="创建博客文章">创建博客文章</h2>
+<p><strong>hugo博客一般通过<a href="https://markdown.com.cn/">markdown</a>格式进行编写</strong></p>
+<ul>
+<li>在post目录下创建一篇名为myblog的博客</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>hugo new post/myblog.md
+</span></span></code></pre></div><p>创建完成后在<code>blog/content/post</code>即可看到<code>myblog.md</code>文件</p>
+<ul>
+<li>本地预览博客文章</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cd&amp;&amp;<span style="color:#658b00">cd</span> blog
+</span></span><span style="display:flex;"><span>hugo server -t m10c --buildDrafts
+</span></span></code></pre></div><p><strong>测试无误后即可部署到远端</strong></p>
+<hr>
+<h2 id="部署至github仓库">部署至github仓库</h2>
+<p>创建github博客仓库，仓库名称<strong>必须为“用户名.github.io”</strong>，例如<code>FBwenoll.github.io</code><br>
+<strong>部署时Git工具必须已初始化完成，具体方法详见百度</strong></p>
+<ul>
+<li>生成public文件</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>hugo --theme=m10c --baseUrl=<span style="color:#cd5555">&#34;https://FBwenoll.github.io&#34;</span> --buildDrafts
+</span></span></code></pre></div><p>其中m10c为主题名称，url为博客的访问地址</p>
+<ul>
+<li>public文件夹中初始化git</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#658b00">cd</span> public
+</span></span><span style="display:flex;"><span>git init
+</span></span><span style="display:flex;"><span>git add . 
+</span></span><span style="display:flex;"><span>git commit -m <span style="color:#cd5555">&#34;第一次提交&#34;</span>
+</span></span></code></pre></div><ul>
+<li>关联github仓库</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git remote add origin https://github.com/FBwenoll/FBwenoll.github.io.git
+</span></span></code></pre></div><p>地址为前面新建仓库的地址</p>
+<ul>
+<li>推至远端</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git push -u origin master
+</span></span><span style="display:flex;"><span>输入用户名&amp;密码
+</span></span></code></pre></div><p>此时若出现<code>Support for password authentication was removed on...</code>等字眼，则需要新建KEY进行导入。</p>
+<ol>
+<li>进入<code>github-&gt;settings-&gt; Developer settings-&gt;Personal access tokens-&gt;generate a new token</code></li>
+<li>复制生成的KEY</li>
+<li>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> git remote set-url origin https://刚刚复制的口令@github.com/FBwenoll/FBwenoll.github.io.git
+</span></span></code></pre></div></li>
+</ol>
+<ul>
+<li>再次尝试<code>git push</code>即可成功</li>
+</ul>
+
+    </div>
+    <div class="post-footer">
+      
+    </div>
+  </article>
+
+    </main>
+  </body>
+</html>
