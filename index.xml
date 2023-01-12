@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>My New Hugo Site</title>
+    <link>https://FBwenoll.github.io/</link>
+    <description>Recent content on My New Hugo Site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 12 Jan 2023 12:37:05 +0800</lastBuildDate><atom:link href="https://FBwenoll.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>通过VsCode Remote WSL搭建linux C 环境</title>
+      <link>https://FBwenoll.github.io/post/%E9%80%9A%E8%BF%87vscode-remote-wsl%E6%90%AD%E5%BB%BAlinux-c-%E7%8E%AF%E5%A2%83/</link>
+      <pubDate>Thu, 12 Jan 2023 12:37:05 +0800</pubDate>
+      
+      <guid>https://FBwenoll.github.io/post/%E9%80%9A%E8%BF%87vscode-remote-wsl%E6%90%AD%E5%BB%BAlinux-c-%E7%8E%AF%E5%A2%83/</guid>
+      <description>安装编译工具链 安装编译工具 sudo apt update sudo apt-get install build-essential gbd sudo apt-get install cmake 验证是否安装成功 gcc --version g++ --version gbd --version cmake--version 安装Vscode插件 首先通过remote_wsl连接WSL2 在连接WSL的状态下安装C++、Cmake、CmakeTools等一系列工具 创建工程 创建如下目录 Projects └── Demo ├── include │ └── HelloWorld.h ├── main.cpp └── src └── HelloWorld.cpp 其中Projects为工作空间，Demo为项目 F5选择工具链即可进行编译运行,但此时会报错，因为此时我们没有将新建的include&amp;amp;src目录添至includePath中去。 添加includePath 通过ctrl+shift+p打开命令窗口，并输入configuration，即可在.vscode文件夹中看到c_cpp_properties.json以及task.json文件。 在c_cpp_properties.json中includePath内添加工程内头文件所在的文件目录： { &amp;#34;configurations&amp;#34;: [ { &amp;#34;name&amp;#34;: &amp;#34;Linux&amp;#34;, &amp;#34;includePath&amp;#34;: [ &amp;#34;${workspaceFolder}/**&amp;#34;, &amp;#34;${workspaceFolder}/Demo/include&amp;#34;//头文件目录 ] ... } ], &amp;#34;version&amp;#34;:4 } 在task.json文件中args内添加需要编译的cpp文件目录： &amp;#34;args&amp;#34;: [ &amp;#34;-fdiagnostics-color=always&amp;#34;, &amp;#34;-g&amp;#34;, &amp;#34;${workspaceFolder}/Demo/**.cpp&amp;#34;,//编译Demo目录下所有.cpp文件 &amp;#34;${workspaceFolder}/Demo/src/**.cpp&amp;#34;,//编译Demo/src目录下所有.cpp文件 &amp;#34;-o&amp;#34;, &amp;#34;${fileDirname}/${fileBasenameNoExtension}&amp;#34;, //添加如下内容以启用多文件编译 &amp;#34;-I&amp;#34;, &amp;#34;${workspaceFolder}/Demo/include&amp;#34;,//头文件目录 &amp;#34;-pthread&amp;#34; ], </description>
+    </item>
+    
+  </channel>
+</rss>
