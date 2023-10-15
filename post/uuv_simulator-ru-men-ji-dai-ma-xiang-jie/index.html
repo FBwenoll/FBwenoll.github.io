@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>uuv_simulator入门及问题记录 | FBwenoll&#39;s Blog</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://fbwenoll.eu.org/favicon.ico?v=1697384461365">
+<link rel="stylesheet" href="https://fbwenoll.eu.org/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="uuv_simulator是一个基于ROS1的属下机器人仿真包，具体详见其github主页，它可以安装在kinetic/lunar /melodic/noetic版本的ROS中。其中noetic版为其他开发者移植。作者使用的WSL2运行下的..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://fbwenoll.eu.org">
+        <img src="https://fbwenoll.eu.org/images/avatar.png?v=1697384461365" class="site-logo">
+        <h1 class="site-title">FBwenoll&#39;s Blog</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+        
+          <a href="/download" class="site-nav">
+            文件
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/FBwenoll?tab=repositories" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      这里是FBwenoll的博客。
+    </div>
+    <div class="site-footer">
+      in  <a href="https://www.usst.edu.cn/" target="_blank">USST</a> | <a class="rss" href="https://fbwenoll.eu.org/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">uuv_simulator入门及问题记录</h2>
+            <div class="post-date">2023-09-20</div>
+            
+              <div class="feature-container" style="background-image: url('https://fbwenoll.eu.org/post-images/uuv_simulator-ru-men-ji-dai-ma-xiang-jie.png')">
+              </div>
+            
+            <div class="post-content" v-pre>
+              <p>uuv_simulator是一个基于ROS1的属下机器人仿真包，具体详见其<a href="https://github.com/uuvsimulator/uuv_simulator">github主页</a>，它可以安装在kinetic/lunar /melodic/noetic版本的ROS中。其中noetic版为其他开发者移植。作者使用的WSL2运行下的noetic版本，文中所列问题可能不具备普遍性。官方<a href="https://uuvsimulator.github.io/packages/uuv_simulator/intro/">Wiki</a>是最好的学习资料，在搭建仿真平台的过程中，也可参考<a href="https://field-robotics-lab.github.io/dave.doc">Dave</a>。</p>
+<!-- more -->
+<h1 id="一-运行key_board_velocitylaunch时报错">一、运行key_board_velocity.launch时报错</h1>
+<p>报错内容如下：</p>
+<pre><code>[rexrov/keyboard_uuv_velocity_teleop-4] process has died [pid 61583, exit code 255, cmd /home/lak/catkin_ws/src/uuv_simulator/uuv_teleop/scripts/vehicle_keyboard_teleop.py output:=/rexrov/cmd_vel __name:=keyboard_uuv_velocity_teleop __log:=/home/lak/.ros/log/3087991e-2dcb-11eb-82db-000c29a26e1a/rexrov-keyboard_uuv_velocity_teleop-4.log].
+log file: /home/lak/.ros/log/3087991e-2dcb-11eb-82db-000c29a26e1a/rexrov-keyboard_uuv_velocity_teleop-4*.log
+</code></pre>
+<p><em>该问题在<a href="https://github.com/uuvsimulator/uuv_simulator/issues/424">issue</a>中有记录，简单来说就是<code>vehicle_keyboard_teleop.py</code>文件没有找到.</em><br>
+解决办法：在<code>/uuv_teleop/CMakeList.txt</code>中的<code>catkin_install_python</code>一栏中，添加一行代码：<code>scripts/vehicle_keyboard_teleop.py</code>，然后再进行编译即可。</p>
+<h1 id="二-positioncontrolpy解析">二、PositionControl.py解析</h1>
+<ol>
+<li>
+<p>没有节点发布<code>cmd_pose</code>话题，所以<code>cmd_pose_callback</code>从未触发过（原因未知）。</p>
+</li>
+<li>
+<p>当里程计信息更新时，触发<code>odometry_callback</code>回调函数，该函数的结构为：(ChatGPT所得)</p>
+<p>这段代码是一个回调函数，用于处理来自底盘系统的测量速度更新。首先，从消息中提取出位置和姿态信息，存储在变量 p 和 q 中。然后，将位置和姿态信息转换为 numpy 数组形式。如果系统尚未初始化（initialized = False），将当前的位置和姿态作为目标位置和目标姿态，并将 initialized 设置为 True，以便下次回调时不再执行此部分代码。<br>
+接下来，计算时间戳 t。然后，通过将目标位置与当前位置之差变换到机体坐标系下，得到在机体坐标系下的位置误差 e_pos_body。利用四元数进行姿态差计算，得到在机体坐标系下的姿态误差 e_rot_quat。如果位置误差的欧氏范数（仅考虑前两个维度）大于5.0，表示当前距离目标较远，此时将目标航向修正为朝向目标位置，并计算修正后的姿态误差。<br>
+接下来，利用位置误差和时间戳调用 pid_pos 的 regulate 方法计算线速度控制输出v_linear，再利用姿态误差和时间戳调用 pid_rot 的 regulate 方法计算角速度控制输出 v_angular。<br>
+最后，将计算得到的线速度和角速度转换为 Twist 消息格式，发布给底盘系统。</p>
+</li>
+<li>
+<p>得到<code>e_pos_body</code>的过程：</p>
+</li>
+</ol>
+<ul>
+<li><code>trans.quaternion_matrix(q)</code>方法可以将四元数转换为变换矩阵T，再取T矩阵三阶子式即为旋转矩阵R。</li>
+<li><code>e_pos_world</code>为世界坐标系下机器人的位置误差，使它左乘旋转矩阵R，即<code>R.dot(e_pos_world)</code>，即可得到机体坐标系下的位置误差。</li>
+<li>整理上述步骤代码，即可得到：<pre><code class="language-python"> e_pos_body = trans.quaternion_matrix(q).transpose()[0:3,0:3].dot(e_pos_world)
+</code></pre>
+</li>
+</ul>
+<ol>
+<li>得到<code>e_rot_quat</code>的过程：</li>
+</ol>
+<ul>
+<li>使用<code>trans.quaternion_conjugate(q)</code>方法得到四元数<code>q</code>的共轭<code>q'</code>。</li>
+<li>将<code>q'</code>与目标姿态<code>quat_des</code>相乘得到机体姿态四元数的误差。（不是很懂四元数）</li>
+<li>整理上述步骤代码，即可得到：<pre><code class="language-python">e_rot_quat = trans.quaternion_multiply(trans.quaternion_conjugate(q), quat_des)
+</code></pre>
+<ol>
+<li>若在世界坐标系下的xy平面中，机体的实际位置与目标位置之间距离（范数）大于5，即<code>norm(e_pos_world[0:2])&gt;5.0</code>时：</li>
+</ol>
+<ul>
+<li>通过<code>arctan(Y之差/X之差)</code>计算实际机体坐标目标位置坐标之间的角度<code>heading</code>，即<code>heading = math.atan2(e_pos_world[1],e_pos_world[0])</code></li>
+<li>按照计算所得的角度来更新目标四元数姿态,作为新的目标姿态四元数<code>quat_des</code>，使得机器人沿着<code>[0,0,1]</code>即Z轴旋转<code>heading</code>角度，朝着目标位置坐标方向前进。代码实现为：</li>
+</ul>
+<pre><code class="language-python"> quat_des = numpy.array([0, 0, math.sin(0.5*heading), math.cos(0.5*heading)])
+</code></pre>
+<ul>
+<li>最后计算新的机体姿态四元数误差。</li>
+<li>整理上述步骤代码，即可得到：</li>
+</ul>
+<pre><code class="language-python">  if numpy.linalg.norm(e_pos_world[0:2]) &gt; 5.0:
+      heading = math.atan2(e_pos_world[1],e_pos_world[0])
+      quat_des = numpy.array([0, 0, math.sin(0.5*heading), math.cos(0.5*heading)])
+      e_rot_quat = trans.quaternion_multiply(trans.quaternion_conjugate(q), quat_des)
+</code></pre>
+</li>
+</ul>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://fbwenoll.eu.org/post/fei-ju-yu-wang-xia-de-yuan-cheng-kai-ji-ji-rdp-windows-yuan-cheng-cao-zuo/">
+                  <h3 class="post-title">
+                    非局域网下的远程开机及RDP Windows远程操作
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+
+  </body>
+</html>

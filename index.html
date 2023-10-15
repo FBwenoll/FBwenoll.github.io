@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>FBwenoll&#39;s Blog</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://fbwenoll.eu.org/favicon.ico?v=1697384461365">
+<link rel="stylesheet" href="https://fbwenoll.eu.org/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="这里是FBwenoll的博客。">
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://fbwenoll.eu.org">
+        <img src="https://fbwenoll.eu.org/images/avatar.png?v=1697384461365" class="site-logo">
+        <h1 class="site-title">FBwenoll&#39;s Blog</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+        
+          <a href="/download" class="site-nav">
+            文件
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/FBwenoll?tab=repositories" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      这里是FBwenoll的博客。
+    </div>
+    <div class="site-footer">
+      in  <a href="https://www.usst.edu.cn/" target="_blank">USST</a> | <a class="rss" href="https://fbwenoll.eu.org/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          
+            <article class="post-item">
+              <div class="left">
+                <a href="https://fbwenoll.eu.org/post/ros1-noetic-for-wsl2-yu-matlab2023a-lian-he-fang-zhen-bu-shu/">
+                  <h2 class="post-title">ROS1 noetic  for WSL2 与Matlab2023a联合仿真部署</h2>
+                </a>
+                <div class="post-date">
+                  2023-10-14
+                </div>
+                <div class="post-abstract">
+                  <p>本文通过Matlab ROS Toolbox实现与WSL2中ROS的通讯，并通过Topic的方式进行数据交互，以实现Matlab算法对仿真中机器人的控制(以UUV_simulator为例)。</p>
+
+                </div>
+              </div>
+              
+                <a class="right" href="https://fbwenoll.eu.org/post/ros1-noetic-for-wsl2-yu-matlab2023a-lian-he-fang-zhen-bu-shu/">
+                  <div class="feature-container" style="background-image: url('https://fbwenoll.eu.org/post-images/ros1-noetic-for-wsl2-yu-matlab2023a-lian-he-fang-zhen-bu-shu.png')">
+                  </div>
+                </a>
+              
+            </article>
+          
+            <article class="post-item">
+              <div class="left">
+                <a href="https://fbwenoll.eu.org/post/uuv_simulator-ru-men-ji-dai-ma-xiang-jie/">
+                  <h2 class="post-title">uuv_simulator入门及问题记录</h2>
+                </a>
+                <div class="post-date">
+                  2023-09-20
+                </div>
+                <div class="post-abstract">
+                  <p>uuv_simulator是一个基于ROS1的属下机器人仿真包，具体详见其<a href="https://github.com/uuvsimulator/uuv_simulator">github主页</a>，它可以安装在kinetic/lunar /melodic/noetic版本的ROS中。其中noetic版为其他开发者移植。作者使用的WSL2运行下的noetic版本，文中所列问题可能不具备普遍性。官方<a href="https://uuvsimulator.github.io/packages/uuv_simulator/intro/">Wiki</a>是最好的学习资料，在搭建仿真平台的过程中，也可参考<a href="https://field-robotics-lab.github.io/dave.doc">Dave</a>。</p>
+
+                </div>
+              </div>
+              
+                <a class="right" href="https://fbwenoll.eu.org/post/uuv_simulator-ru-men-ji-dai-ma-xiang-jie/">
+                  <div class="feature-container" style="background-image: url('https://fbwenoll.eu.org/post-images/uuv_simulator-ru-men-ji-dai-ma-xiang-jie.png')">
+                  </div>
+                </a>
+              
+            </article>
+          
+            <article class="post-item">
+              <div class="left">
+                <a href="https://fbwenoll.eu.org/post/fei-ju-yu-wang-xia-de-yuan-cheng-kai-ji-ji-rdp-windows-yuan-cheng-cao-zuo/">
+                  <h2 class="post-title">非局域网下的远程开机及RDP Windows远程操作</h2>
+                </a>
+                <div class="post-date">
+                  2023-04-30
+                </div>
+                <div class="post-abstract">
+                  <p>本文通过ToDesk/Linux etherwake实现Windows Wake On Lan，并通过Windows专业版自带mstsc工具配合虚拟局域网TailScale实现电脑的远程操作。</p>
+
+                </div>
+              </div>
+              
+                <a class="right" href="https://fbwenoll.eu.org/post/fei-ju-yu-wang-xia-de-yuan-cheng-kai-ji-ji-rdp-windows-yuan-cheng-cao-zuo/">
+                  <div class="feature-container" style="background-image: url('https://fbwenoll.eu.org/post-images/fei-ju-yu-wang-xia-de-yuan-cheng-kai-ji-ji-rdp-windows-yuan-cheng-cao-zuo.jpg')">
+                  </div>
+                </a>
+              
+            </article>
+          
+            <article class="post-item">
+              <div class="left">
+                <a href="https://fbwenoll.eu.org/post/shi-yong-gridea-pei-he-nginx-da-jian-ben-di-fu-wu-qi-bo-ke/">
+                  <h2 class="post-title">使用Gridea配合Nginx搭建本地服务器博客</h2>
+                </a>
+                <div class="post-date">
+                  2023-04-25
+                </div>
+                <div class="post-abstract">
+                  <p>本文使用中国移动CM311-1a机顶盒配合Ubuntu系统作为博客的服务器，通过本地Gridea SFTP的方法将静态网页上传至服务器内，并通过Nginx实现博客的局域网访问。</p>
+
+                </div>
+              </div>
+              
+                <a class="right" href="https://fbwenoll.eu.org/post/shi-yong-gridea-pei-he-nginx-da-jian-ben-di-fu-wu-qi-bo-ke/">
+                  <div class="feature-container" style="background-image: url('https://fbwenoll.eu.org/post-images/shi-yong-gridea-pei-he-nginx-da-jian-ben-di-fu-wu-qi-bo-ke.png')">
+                  </div>
+                </a>
+              
+            </article>
+          
+            <article class="post-item">
+              <div class="left">
+                <a href="https://fbwenoll.eu.org/post/lun-wen-zong-jie-cooperative-formation-control-of-autonomous-underwater-vehicles-an-overview/">
+                  <h2 class="post-title">论文总结：Cooperative Formation Control of Autonomous Underwater Vehicles: An Overview</h2>
+                </a>
+                <div class="post-date">
+                  2023-04-24
+                </div>
+                <div class="post-abstract">
+                  
+                </div>
+              </div>
+              
+                <a class="right" href="https://fbwenoll.eu.org/post/lun-wen-zong-jie-cooperative-formation-control-of-autonomous-underwater-vehicles-an-overview/">
+                  <div class="feature-container" style="background-image: url('https://fbwenoll.eu.org/post-images/lun-wen-zong-jie-cooperative-formation-control-of-autonomous-underwater-vehicles-an-overview.png')">
+                  </div>
+                </a>
+              
+            </article>
+          
+            <article class="post-item">
+              <div class="left">
+                <a href="https://fbwenoll.eu.org/post/tong-guo-vscode-remote-wsl-da-jian-linux-c-huan-jing/">
+                  <h2 class="post-title">通过VsCode Remote WSL搭建linux C++ 环境</h2>
+                </a>
+                <div class="post-date">
+                  2023-01-12
+                </div>
+                <div class="post-abstract">
+                  
+                </div>
+              </div>
+              
+                <a class="right" href="https://fbwenoll.eu.org/post/tong-guo-vscode-remote-wsl-da-jian-linux-c-huan-jing/">
+                  <div class="feature-container" style="background-image: url('https://fbwenoll.eu.org/post-images/tong-guo-vscode-remote-wsl-da-jian-linux-c-huan-jing.png')">
+                  </div>
+                </a>
+              
+            </article>
+          
+            <article class="post-item">
+              <div class="left">
+                <a href="https://fbwenoll.eu.org/post/ru-he-chuang-jian-zi-ji-de-bo-ke-hugo-kuang-jia-wei-li/">
+                  <h2 class="post-title">如何创建自己的博客  Hugo框架为例</h2>
+                </a>
+                <div class="post-date">
+                  2023-01-12
+                </div>
+                <div class="post-abstract">
+                  
+                </div>
+              </div>
+              
+                <a class="right" href="https://fbwenoll.eu.org/post/ru-he-chuang-jian-zi-ji-de-bo-ke-hugo-kuang-jia-wei-li/">
+                  <div class="feature-container" style="background-image: url('https://fbwenoll.eu.org/post-images/ru-he-chuang-jian-zi-ji-de-bo-ke-hugo-kuang-jia-wei-li.png')">
+                  </div>
+                </a>
+              
+            </article>
+          
+
+          <div class="pagination-container">
+  
+  
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+
+  </body>
+</html>

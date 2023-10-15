@@ -1,0 +1,768 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://fbwenoll.eu.org</id>
+    <title>FBwenoll&apos;s Blog</title>
+    <updated>2023-10-15T15:41:03.631Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://fbwenoll.eu.org"/>
+    <link rel="self" href="https://fbwenoll.eu.org/atom.xml"/>
+    <subtitle>这里是FBwenoll的博客。</subtitle>
+    <logo>https://fbwenoll.eu.org/images/avatar.png</logo>
+    <icon>https://fbwenoll.eu.org/favicon.ico</icon>
+    <rights>All rights reserved 2023, FBwenoll&apos;s Blog</rights>
+    <entry>
+        <title type="html"><![CDATA[ROS1 noetic  for WSL2 与Matlab2023a联合仿真部署]]></title>
+        <id>https://fbwenoll.eu.org/post/ros1-noetic-for-wsl2-yu-matlab2023a-lian-he-fang-zhen-bu-shu/</id>
+        <link href="https://fbwenoll.eu.org/post/ros1-noetic-for-wsl2-yu-matlab2023a-lian-he-fang-zhen-bu-shu/">
+        </link>
+        <updated>2023-10-14T14:30:06.000Z</updated>
+        <summary type="html"><![CDATA[<p>本文通过Matlab ROS Toolbox实现与WSL2中ROS的通讯，并通过Topic的方式进行数据交互，以实现Matlab算法对仿真中机器人的控制(以UUV_simulator为例)。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>本文通过Matlab ROS Toolbox实现与WSL2中ROS的通讯，并通过Topic的方式进行数据交互，以实现Matlab算法对仿真中机器人的控制(以UUV_simulator为例)。</p>
+<!-- more -->
+<h1 id="一-wsl2相关配置">一、WSL2相关配置</h1>
+<ol>
+<li>进入WSL2 linux系统，通过<code>ifconfig</code>命令查看当前子系统的IP地址，以<code>172.25.120.194</code>为例。<br>
+<img src="https://fbwenoll.eu.org/post-images/1697294202272.png" alt="ifconfig" loading="lazy"></li>
+<li>在终端配置文件(<code>.zshrc</code>或者<code>.bashrc</code>等)中，添加语句<code>export ROS_IP=172.25.120.194</code>,并通过<code>source</code>命令更新配置文件。<br>
+<img src="https://fbwenoll.eu.org/post-images/1697294306617.png" alt="zshrc" loading="lazy"><br>
+运行<code>roscore</code>,运行成功后，代表上述配置无误。</li>
+<li>在WSL2中安装并配置SSH</li>
+</ol>
+<pre><code class="language-bash">sudo apt-get update
+sudo apt-get install openssh-server
+sudo vim /etc/ssh/sshd_config
+</code></pre>
+<p>在配置文件中做出如下改动：</p>
+<ul>
+<li>将<code>PasswordAuthentication no</code>改动为<code>PasswordAuthentication yes</code></li>
+<li>将<code>PermitRootLogin no</code>改动为<code>PermitRootLogin yes</code></li>
+<li>完成后，通过<code>sudo passwd root ****</code>设置root账户密码，并通过<code>sudo service ssh restart</code>重启SSH服务。</li>
+</ul>
+<h1 id="二-matlab配置">二、Matlab配置</h1>
+<ol>
+<li>通过<a href="https://ww2.mathworks.cn/matlabcentral/answers/uploaded_files/822990/configureWSL2.m">链接下载configWSL2.m配置文件</a>，注意函数中<code>ROSPath</code>是否需要修改。</li>
+<li>运行函数<code>configureWSL2(IP,root,****)</code>.其中<code>IP</code>代指步骤一中通过<code>ifconfig</code>所看到的IP地址，以本文为例，IP为<code>172.25.120.194</code>.<code>root</code>代指登陆账户为root账户，<code>****</code>代指步骤一中所设置的root用户密码。</li>
+<li>在Windows Powershell中运行命令<code>set ROS_IP=172.25.120.194</code>（不知道有没有用）。</li>
+</ol>
+<h1 id="三-测试">三、测试</h1>
+<p>后续步骤可参照<a href="https://www.guyuehome.com/35551">博客</a></p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[uuv_simulator入门及问题记录]]></title>
+        <id>https://fbwenoll.eu.org/post/uuv_simulator-ru-men-ji-dai-ma-xiang-jie/</id>
+        <link href="https://fbwenoll.eu.org/post/uuv_simulator-ru-men-ji-dai-ma-xiang-jie/">
+        </link>
+        <updated>2023-09-20T01:43:29.000Z</updated>
+        <summary type="html"><![CDATA[<p>uuv_simulator是一个基于ROS1的属下机器人仿真包，具体详见其<a href="https://github.com/uuvsimulator/uuv_simulator">github主页</a>，它可以安装在kinetic/lunar /melodic/noetic版本的ROS中。其中noetic版为其他开发者移植。作者使用的WSL2运行下的noetic版本，文中所列问题可能不具备普遍性。官方<a href="https://uuvsimulator.github.io/packages/uuv_simulator/intro/">Wiki</a>是最好的学习资料，在搭建仿真平台的过程中，也可参考<a href="https://field-robotics-lab.github.io/dave.doc">Dave</a>。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>uuv_simulator是一个基于ROS1的属下机器人仿真包，具体详见其<a href="https://github.com/uuvsimulator/uuv_simulator">github主页</a>，它可以安装在kinetic/lunar /melodic/noetic版本的ROS中。其中noetic版为其他开发者移植。作者使用的WSL2运行下的noetic版本，文中所列问题可能不具备普遍性。官方<a href="https://uuvsimulator.github.io/packages/uuv_simulator/intro/">Wiki</a>是最好的学习资料，在搭建仿真平台的过程中，也可参考<a href="https://field-robotics-lab.github.io/dave.doc">Dave</a>。</p>
+<!-- more -->
+<h1 id="一-运行key_board_velocitylaunch时报错">一、运行key_board_velocity.launch时报错</h1>
+<p>报错内容如下：</p>
+<pre><code>[rexrov/keyboard_uuv_velocity_teleop-4] process has died [pid 61583, exit code 255, cmd /home/lak/catkin_ws/src/uuv_simulator/uuv_teleop/scripts/vehicle_keyboard_teleop.py output:=/rexrov/cmd_vel __name:=keyboard_uuv_velocity_teleop __log:=/home/lak/.ros/log/3087991e-2dcb-11eb-82db-000c29a26e1a/rexrov-keyboard_uuv_velocity_teleop-4.log].
+log file: /home/lak/.ros/log/3087991e-2dcb-11eb-82db-000c29a26e1a/rexrov-keyboard_uuv_velocity_teleop-4*.log
+</code></pre>
+<p><em>该问题在<a href="https://github.com/uuvsimulator/uuv_simulator/issues/424">issue</a>中有记录，简单来说就是<code>vehicle_keyboard_teleop.py</code>文件没有找到.</em><br>
+解决办法：在<code>/uuv_teleop/CMakeList.txt</code>中的<code>catkin_install_python</code>一栏中，添加一行代码：<code>scripts/vehicle_keyboard_teleop.py</code>，然后再进行编译即可。</p>
+<h1 id="二-positioncontrolpy解析">二、PositionControl.py解析</h1>
+<ol>
+<li>
+<p>没有节点发布<code>cmd_pose</code>话题，所以<code>cmd_pose_callback</code>从未触发过（原因未知）。</p>
+</li>
+<li>
+<p>当里程计信息更新时，触发<code>odometry_callback</code>回调函数，该函数的结构为：(ChatGPT所得)</p>
+<p>这段代码是一个回调函数，用于处理来自底盘系统的测量速度更新。首先，从消息中提取出位置和姿态信息，存储在变量 p 和 q 中。然后，将位置和姿态信息转换为 numpy 数组形式。如果系统尚未初始化（initialized = False），将当前的位置和姿态作为目标位置和目标姿态，并将 initialized 设置为 True，以便下次回调时不再执行此部分代码。<br>
+接下来，计算时间戳 t。然后，通过将目标位置与当前位置之差变换到机体坐标系下，得到在机体坐标系下的位置误差 e_pos_body。利用四元数进行姿态差计算，得到在机体坐标系下的姿态误差 e_rot_quat。如果位置误差的欧氏范数（仅考虑前两个维度）大于5.0，表示当前距离目标较远，此时将目标航向修正为朝向目标位置，并计算修正后的姿态误差。<br>
+接下来，利用位置误差和时间戳调用 pid_pos 的 regulate 方法计算线速度控制输出v_linear，再利用姿态误差和时间戳调用 pid_rot 的 regulate 方法计算角速度控制输出 v_angular。<br>
+最后，将计算得到的线速度和角速度转换为 Twist 消息格式，发布给底盘系统。</p>
+</li>
+<li>
+<p>得到<code>e_pos_body</code>的过程：</p>
+</li>
+</ol>
+<ul>
+<li><code>trans.quaternion_matrix(q)</code>方法可以将四元数转换为变换矩阵T，再取T矩阵三阶子式即为旋转矩阵R。</li>
+<li><code>e_pos_world</code>为世界坐标系下机器人的位置误差，使它左乘旋转矩阵R，即<code>R.dot(e_pos_world)</code>，即可得到机体坐标系下的位置误差。</li>
+<li>整理上述步骤代码，即可得到：<pre><code class="language-python"> e_pos_body = trans.quaternion_matrix(q).transpose()[0:3,0:3].dot(e_pos_world)
+</code></pre>
+</li>
+</ul>
+<ol>
+<li>得到<code>e_rot_quat</code>的过程：</li>
+</ol>
+<ul>
+<li>使用<code>trans.quaternion_conjugate(q)</code>方法得到四元数<code>q</code>的共轭<code>q'</code>。</li>
+<li>将<code>q'</code>与目标姿态<code>quat_des</code>相乘得到机体姿态四元数的误差。（不是很懂四元数）</li>
+<li>整理上述步骤代码，即可得到：<pre><code class="language-python">e_rot_quat = trans.quaternion_multiply(trans.quaternion_conjugate(q), quat_des)
+</code></pre>
+<ol>
+<li>若在世界坐标系下的xy平面中，机体的实际位置与目标位置之间距离（范数）大于5，即<code>norm(e_pos_world[0:2])&gt;5.0</code>时：</li>
+</ol>
+<ul>
+<li>通过<code>arctan(Y之差/X之差)</code>计算实际机体坐标目标位置坐标之间的角度<code>heading</code>，即<code>heading = math.atan2(e_pos_world[1],e_pos_world[0])</code></li>
+<li>按照计算所得的角度来更新目标四元数姿态,作为新的目标姿态四元数<code>quat_des</code>，使得机器人沿着<code>[0,0,1]</code>即Z轴旋转<code>heading</code>角度，朝着目标位置坐标方向前进。代码实现为：</li>
+</ul>
+<pre><code class="language-python"> quat_des = numpy.array([0, 0, math.sin(0.5*heading), math.cos(0.5*heading)])
+</code></pre>
+<ul>
+<li>最后计算新的机体姿态四元数误差。</li>
+<li>整理上述步骤代码，即可得到：</li>
+</ul>
+<pre><code class="language-python">  if numpy.linalg.norm(e_pos_world[0:2]) &gt; 5.0:
+      heading = math.atan2(e_pos_world[1],e_pos_world[0])
+      quat_des = numpy.array([0, 0, math.sin(0.5*heading), math.cos(0.5*heading)])
+      e_rot_quat = trans.quaternion_multiply(trans.quaternion_conjugate(q), quat_des)
+</code></pre>
+</li>
+</ul>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[非局域网下的远程开机及RDP Windows远程操作]]></title>
+        <id>https://fbwenoll.eu.org/post/fei-ju-yu-wang-xia-de-yuan-cheng-kai-ji-ji-rdp-windows-yuan-cheng-cao-zuo/</id>
+        <link href="https://fbwenoll.eu.org/post/fei-ju-yu-wang-xia-de-yuan-cheng-kai-ji-ji-rdp-windows-yuan-cheng-cao-zuo/">
+        </link>
+        <updated>2023-04-29T17:53:34.000Z</updated>
+        <summary type="html"><![CDATA[<p>本文通过ToDesk/Linux etherwake实现Windows Wake On Lan，并通过Windows专业版自带mstsc工具配合虚拟局域网TailScale实现电脑的远程操作。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>本文通过ToDesk/Linux etherwake实现Windows Wake On Lan，并通过Windows专业版自带mstsc工具配合虚拟局域网TailScale实现电脑的远程操作。</p>
+<!-- more -->
+<h1 id="一-rdp-mstsc工具配置">一、RDP mstsc工具配置</h1>
+<p>微软自带的mstsc是一个非常好用的工具，相比于TeamViewer之流的工具，mstsc并不是通过录屏的方式来实现远程操作，而是通过微软自家的RDP协议将GDI命令参数传送至客户端再进行渲染，只传送命令不传送画面，因此对网络要求较低，延迟也较小。<br>
+与此同时，mstsc还可实现客户端硬盘、摄像头等设备挂载至远程设备（远程操作的电脑可以调用手边电脑的摄像头、话筒甚至是硬盘）。<br>
+作为一个surface用户，当我使用surface作为客户端时，它甚至支持手写笔及触控输入。😃</p>
+<blockquote>
+<p>这一步可以参考<a href="https://www.bilibili.com/video/BV1YM4y1z7wE/?spm_id_from=333.999.0.0">晨钟酱的视频</a>。</p>
+</blockquote>
+<h2 id="1tailscale组建虚拟局域网">（1）TailScale组建虚拟局域网</h2>
+<p>以往文章中也略作介绍（上述视频链接中有详细介绍），该软件可以将同一账户登陆下的设备组件至同一虚拟局域网之中。通过这一方法，我们可以不通过公网IP的方法便可以在外访问内网。</p>
+<ol>
+<li>在两台电脑上下载TailScale并登陆同一账号，可以使用微软/Github/谷歌等账号登陆。</li>
+<li>打开<a href="https://login.tailscale.com/admin/machines">Tail Sacle console</a>即可查看被绑定设备的虚拟IP地址，如下图所示。<br>
+<img src="https://fbwenoll.eu.org/post-images/1682834354470.png" alt="tailscale" loading="lazy"></li>
+<li>在被控端电脑打开设置-&gt;系统-&gt;远程桌面 中打开该选项。<br>
+<img src="https://fbwenoll.eu.org/post-images/1682834480293.png" alt="远程桌面" loading="lazy"><br>
+就此，被控端设置完成。</li>
+<li>在客户端打开远程桌面连接(mstsc)，在计算机中填写TailScale虚拟IP地址，用户名中填写被控机器所登录的微软账户名称（一般为Outlook邮箱），密码则为微软账户密码。<br>
+<img src="https://fbwenoll.eu.org/post-images/1682834808106.png" alt="mstsc登陆" loading="lazy"></li>
+</ol>
+<h2 id="2rdp优化配置">（2）RDP优化配置</h2>
+<p>这里主要总结一下如何进行RDP远程桌面的设置优化<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>。</p>
+<h3 id="显卡加速">显卡加速</h3>
+<ol>
+<li>首先打开远程主机上的组策略（Win+R打开运行，输入gpedit.msc）。</li>
+<li>依次找到计算机配置-&gt;管理模板-&gt;Windows组件-&gt;远程桌面服务-&gt;远程桌面会话主机-&gt;远程会话环境。</li>
+<li>在右边选择将硬件图形适配器应用于所有远程桌面服务会话。<br>
+<img src="https://fbwenoll.eu.org/post-images/1682791812064.png" alt="显卡加速" loading="lazy"></li>
+<li>右键编辑，选择已启用，确定保存并重启。</li>
+</ol>
+<h3 id="开启remotefx-usb重定向">开启RemoteFX USB重定向</h3>
+<ol>
+<li>RDP默认支持共享存储设备，我们可以让它共享大多数的USB设备。</li>
+<li>在客户端电脑上，打开组策略（Win+R打开运行，输入gpedit.msc）。</li>
+<li>依次找到 计算机配置-&gt;管理模板-&gt;Windows组件-&gt;远程桌面服务-&gt;远程桌面会话客户端-&gt;RemoteFX USB 设备重定向。<br>
+<img src="https://fbwenoll.eu.org/post-images/1682791946333.png" alt="RemoteFX USB" loading="lazy"></li>
+<li>选择右边的允许此计算机中受支持的其他 RemoteFX USB 设备的 RDP 重定向，设置为已启用，然后将选项中的RemoteFX USB重定向访问权限”设置为“管理员和用户。</li>
+<li>确定保存，重启生效。<br>
+重启后打开远程桌面客户端，点击显示选项，在本地资源里的本地设备和资源的详细信息中可以找到其他支持的RemoteFX USB设备，一般来说可以全都勾选上。</li>
+</ol>
+<h3 id="声音流畅度优化">声音流畅度优化</h3>
+<ol>
+<li>首先打开远程主机上的组策略（Win+R打开运行，输入gpedit.msc）<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup>。</li>
+<li>依次找到 计算机配置 - 管理模板 - Windows 组件 - 远程桌面服务 - 远程桌面会话主机 - 设备和资源重定向。<br>
+<img src="https://fbwenoll.eu.org/post-images/1682792221539.webp" alt="限制音频播放质量" loading="lazy"></li>
+<li>双击打开 限制音频播放质量，打开 已启用，然后根据网络情况选择音频质量。</li>
+<li><code>win+R</code>运行<code>gpupdate /force</code>重新加载策略组。就此，服务端已设置完毕。</li>
+<li>客户端中打开mstsc，显示-&gt;颜色-&gt;16位色深；体验-&gt;调制解调器(56 kbps)，输入被控端虚拟ip地址。将配置文件另存为桌面。<br>
+<img src="https://fbwenoll.eu.org/post-images/1682792540068.png" alt="mstsc" loading="lazy"></li>
+<li>以记事本方式打开该文件，并在末尾添加:</li>
+</ol>
+<pre><code>set audioqualitymode:i:2 
+</code></pre>
+<ol start="7">
+<li>在后续连接时，直接打开该.rdp文件即可。</li>
+</ol>
+<blockquote>
+<p>据<sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup>，图形首选项中将两台电脑的声卡设置为高性能也可改善音频延迟的情况。</p>
+</blockquote>
+<h2 id="3其它设置">（3）其它设置</h2>
+<p>由于作者试图从关机到控制完全远程实现，因此还需一些额外设置。例如：TailScale作为Windows软件，在首次开机锁屏密码输入前它并不会运行（设置开机自启也不会在输入密码前运行），这使得我们的TailScale在登陆账户前无法生效。但我们只能在TailScale虚拟局域网下才能实现远程操作输入密码，陷入死循环。<br>
+这里通过Windows任务计划程序来实现TailScale服务自启<sup class="footnote-ref"><a href="#fn4" id="fnref4">[4]</a></sup>。</p>
+<ol>
+<li><code>win+R</code>输入<code>control</code>打开控制面板，在搜索栏中搜索“计划任务”并打开。</li>
+<li>选择创建任务，在名称中输入“TailScale开机自启”,下方勾选“不管用户是否登陆都要运行”。<br>
+<img src="https://fbwenoll.eu.org/post-images/1682835851092.png" alt="计划任务" loading="lazy"></li>
+<li>在触发器-&gt;新建-&gt;开始任务中选择“启动时”。<br>
+<img src="https://fbwenoll.eu.org/post-images/1682835963112.png" alt="触发器" loading="lazy"></li>
+<li>在操作中绑定应用程序，程序选择TailScale安装地址中的<code>tailscale-ipn.exe</code>。<br>
+<img src="https://fbwenoll.eu.org/post-images/1682836053326.png" alt="操作" loading="lazy"></li>
+<li>最后，在条-&gt;网络中一栏勾选“只有在以下网络连接可用时才启动”并选择“任何连接”。<br>
+<img src="https://fbwenoll.eu.org/post-images/1682836193172.png" alt="网络" loading="lazy"></li>
+</ol>
+<h1 id="二-wake-on-lan设置">二、Wake On Lan设置</h1>
+<h2 id="1wake-on-lan-主板设置">（1）Wake On Lan 主板设置</h2>
+<ol>
+<li>在BIOS中打开<code>Wake On Lan</code>相关设置<sup class="footnote-ref"><a href="#fn5" id="fnref5">[5]</a></sup>。</li>
+<li>被控端网卡驱动里需要设置开启WOL相关选项。<br>
+无线网卡一般不支持wol，有线网卡大部分支持。在设备管理器中找到支持wol唤醒的网卡设备，右键选择「属性」，然后在「电源管理」里面开启「允许此设备唤醒计算机」，然后在「高级」一栏里找到「唤醒魔包」并「启用」。<br>
+<img src="https://fbwenoll.eu.org/post-images/1682838872231.png" alt="允许唤醒" loading="lazy"><br>
+<img src="https://fbwenoll.eu.org/post-images/1682838793154.png" alt="唤醒魔包" loading="lazy"></li>
+<li>关闭快速启动<br>
+<img src="https://fbwenoll.eu.org/post-images/1682838946895.png" alt="快速启动" loading="lazy"></li>
+</ol>
+<h2 id="2todesk方法">（2）ToDesk方法</h2>
+<p>这里参考<a href="https://www.todesk.com/faq/57.html">ToDesk的官方教程</a>，使用较简单，但是该方案有如下缺点：</p>
+<ul>
+<li>需要被控端开机自启ToDesk，与此同时被控端局域网下需要有另一台<code>linux/ios/mac/win/android</code>设备登陆ToDesk并始终在线。</li>
+</ul>
+<h2 id="3linux唤醒">（3）linux唤醒</h2>
+<p>作者的使用场景为：Surface在寝室中远程控制实验室的笔记本电脑，实验室局域网下还有配有TailScale的linux服务器。因此作者使用同局域网下的linux搭配etherwake软件包实现windows设备的WakeOnLan<sup class="footnote-ref"><a href="#fn6" id="fnref6">[6]</a></sup>。</p>
+<ol>
+<li>首先通过<code>sudo apt-get update &amp;&amp; sudo apt install etherwake</code>安装软件包。</li>
+<li>安装完成后即可通过<code>etherwake AA:BB:CC:DD:EE:FF</code>实现windows设备的远程开机。其中<code>AA:BB:CC:DD:EE:FF</code>为windows的MAC地址。</li>
+</ol>
+<h3 id="shell脚本">shell脚本</h3>
+<p>尽管etherwake是一个很方便的工具，但是每次远程开机都需要输入MAC地址未免有些麻烦，因此在这里作者选择编写一个很简单的<code>bash</code>脚本来简化该命令。</p>
+<ol>
+<li>编写脚本
+<ul>
+<li>创建脚本文件，命名为<code>wol</code>：</li>
+</ul>
+<pre><code class="language-shell">sudo vim wol
+</code></pre>
+<ul>
+<li>在<code>wol</code>中添加如下命令<sup class="footnote-ref"><a href="#fn7" id="fnref7">[7]</a></sup>：</li>
+</ul>
+<pre><code class="language-shell">#！/bin/zsh
+
+echo 管理员密码 | sudo -S etherwake
+
+echo 'Wake On Lan......OK!'
+
+</code></pre>
+<ul>
+<li><code>esc</code>-&gt;<code>:</code>-&gt;<code>wq</code>进行保存。</li>
+</ul>
+</li>
+<li>给予权限<sup class="footnote-ref"><a href="#fn8" id="fnref8">[8]</a></sup><br>
+在上述脚本所在文件夹中执行以下命令：<pre><code class="language-shell">sudo chmod 777 wol
+sudo chmod +x wol
+</code></pre>
+</li>
+<li>添加环境变量<sup class="footnote-ref"><a href="#fn9" id="fnref9">[9]</a></sup>
+<ul>
+<li>通过<code>sudo vim /.~zshrc</code>打开<code>zsh</code>配置文件。（如果用bash则打开~/.bashrc）</li>
+<li>在末尾添加<code>export PATH=$PATH:/home/fbwenoll</code>。其中<code>/home/fbwenoll</code>为上述wol文件所处的目录。</li>
+</ul>
+</li>
+</ol>
+<h2 id="4-物联网方法mqtt">（4） 物联网方法MQTT</h2>
+<p>此外也可以通过ESP32/ESP8266一类带有WiFi功能的MCU实现计算机的WOL，这里提供两个链接供参考。</p>
+<ol>
+<li><a href="https://www.bilibili.com/video/BV1JX4y1V7mi/?spm_id_from=333.337.search-card.all.click">MQTT Broker</a></li>
+<li><a href="https://blog.csdn.net/m0_37624610/article/details/108196206">Blinker</a></li>
+</ol>
+<h1 id="其它">其它</h1>
+<p>由于作者使用Ubuntu+windows11双系统，当开机时会先进入grub引导来选择要进入的系统(默认为ubuntu)。因此还要将win11设置为grub默认开机选项。这里提供一篇博客供参考<sup class="footnote-ref"><a href="#fn10" id="fnref10">[10]</a></sup>。</p>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>https://blog.csdn.net/csdn_life18/article/details/108250846#RemoteFX_USB_64 <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p>https://www.bilibili.com/read/cv4421723/ <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn3" class="footnote-item"><p>https://www.zhihu.com/question/406412942 <a href="#fnref3" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn4" class="footnote-item"><p>https://www.zhihu.com/question/43325335 <a href="#fnref4" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn5" class="footnote-item"><p>https://www.todesk.com/faq/57.html <a href="#fnref5" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn6" class="footnote-item"><p>https://www.jianshu.com/p/ea09ec4d4867 <a href="#fnref6" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn7" class="footnote-item"><p>https://blog.csdn.net/Britripe/article/details/114081200 <a href="#fnref7" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn8" class="footnote-item"><p>https://blog.csdn.net/niuxikun/article/details/108996733 <a href="#fnref8" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn9" class="footnote-item"><p>https://blog.csdn.net/m0_46278037/article/details/120457468 <a href="#fnref9" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn10" class="footnote-item"><p>https://blog.csdn.net/weixin_41683971/article/details/105199558 <a href="#fnref10" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[使用Gridea配合Nginx搭建本地服务器博客]]></title>
+        <id>https://fbwenoll.eu.org/post/shi-yong-gridea-pei-he-nginx-da-jian-ben-di-fu-wu-qi-bo-ke/</id>
+        <link href="https://fbwenoll.eu.org/post/shi-yong-gridea-pei-he-nginx-da-jian-ben-di-fu-wu-qi-bo-ke/">
+        </link>
+        <updated>2023-04-25T09:19:20.000Z</updated>
+        <summary type="html"><![CDATA[<p>本文使用中国移动CM311-1a机顶盒配合Ubuntu系统作为博客的服务器，通过本地Gridea SFTP的方法将静态网页上传至服务器内，并通过Nginx实现博客的局域网访问。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>本文使用中国移动CM311-1a机顶盒配合Ubuntu系统作为博客的服务器，通过本地Gridea SFTP的方法将静态网页上传至服务器内，并通过Nginx实现博客的局域网访问。</p>
+<!-- more -->
+<h1 id="一-gridea的安装">一、Gridea的安装</h1>
+<p>Gridea 是一个静态博客写作的跨平台开源客户端，使用该平台可以避免诸如Hugo、Hexo等静态博客生成工具的繁琐过程。且对于Git等操作可以实现图形化配置，一键Push至云端。这是其<a href="https://github.com/getgridea/gridea">开源仓库链接</a>。<br>
+其使用教程可根据官方Wiki配合菜单进行学习，这里着重记录一下有关Gridea SFTP上传至服务器的操作：</p>
+<ol>
+<li>在服务器终端或路由器管理页面中获取服务器的IP地址，这里以192.168.0.16为例。<img src="https://fbwenoll.eu.org/post-images/1682415211893.png" alt="服务器IP地址" loading="lazy"></li>
+<li>在Gridea客户端中，选择远程-&gt;SFTP，如图一所示。<br>
+在<strong>域名</strong>中输入<code>http://</code>+方才查询到的IP地址 ，如图中所示。<br>
+对于<strong>端口</strong>选项而言，一般来说默认为22端口。<br>
+<strong>Server</strong>一栏同样为IP地址。<br>
+<strong>Username</strong>为服务器端Ubuntu的登陆用户名，同理<strong>Password</strong>为该用户名对应的密码。<br>
+<strong>Remote Path</strong>为Gridea编译所得的静态网页将要发送至的地址，在这里作者设置为/home/username/Blog.</li>
+</ol>
+<blockquote>
+<p>其他路径也无妨，只要在后续Nginx配置中同时进行修改即可。</p>
+</blockquote>
+<p>至此，本地的Gridea配置暂时告一段落。</p>
+<figure data-type="image" tabindex="1"><img src="https://fbwenoll.eu.org/post-images/1682415268458.png" alt="图1 Gridea客户端" loading="lazy"></figure>
+<h1 id="二-服务器中nginx的安装">二、服务器中Nginx的安装</h1>
+<h2 id="1ssh配置">（1）SSH配置</h2>
+<p>SFTP是SSH的一部分，且对于linux服务器来说，通过SSH进行远程访问才是常态。因此在这里首先通过<code>systemctl status sshd</code>命令检查服务器中是否装有SSH。</p>
+<blockquote>
+<p>一般来说，Ubuntu系统默认会带有SSH，若系统未装有SSH，通过<code>apt</code>命令即可进行安装。</p>
+</blockquote>
+<ul>
+<li>通过<code>sudo ufw enable</code>开启防火墙。</li>
+<li>通过<code>sudo ufw allow ssh</code>打开SSH端口（默认为22）。</li>
+<li>通过<code>sudo systemctl enable ssh</code>设置SSH为开机自启，以便后续进行远程访问/传输。</li>
+</ul>
+<h2 id="2nginx安装及配置">（2）Nginx安装及配置</h2>
+<ol>
+<li>通过<code>apt</code>命令安装nginx<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>。</li>
+<li>在<code>/home/username/</code>下创建Blog文件夹用来放置静态网页的文件。
+<blockquote>
+<p>创建目录要与上文中Gridea中所配置相同。</p>
+</blockquote>
+</li>
+<li>通过<code>vim /etc/nginx/nginx.conf</code>打开Nginx配置文件。在<code>http{}</code>内添加如下代码即可。<pre><code class="language-shell"> http{
+     server {
+         listen   80; //端口
+         server_name 192.168.0.16; 	//访问的域名(本地博客这里设置为服务器的IP地址)
+         root    /home/username/Blog;  //网站文件存放目录，要与上文所创建目录相同。
+         location / {}
+         error_page 404 /404.html;
+             location = /40x.html { }
+         error_page 500 502 503 504 /50x.html;
+             location = /50x.html { }
+         }
+     }
+</code></pre>
+</li>
+<li>设置完成后，通过<code>sudo nginx -s reload</code>命令来重启Nginx。重启完成后，查看是否有error/warning。若无即可在浏览器内通过<code>192.168.0.16</code>来验证nginx是否安装成功。</li>
+</ol>
+<h1 id="三-gridea上传验证">三、Gridea上传验证</h1>
+<p>在完成上述步骤后，在图一Gridea页面中通过左下角_检测远程连接_即可验证SFTP是否可以跑通。</p>
+<blockquote>
+<p>关键在于Gridea中的配置及服务器端Blog目录的创建，与Nginx配置无关。</p>
+</blockquote>
+<p>验证成功后即可点击图一中的上传按钮，将静态网页上传至服务器。</p>
+<p>在本地端浏览器中通过<code>192.168.0.16</code>即可实现对博客网页的访问，如图二所示。</p>
+<figure data-type="image" tabindex="2"><img src="https://fbwenoll.eu.org/post-images/1682417654403.png" alt="图二 博客网页访问" loading="lazy"></figure>
+<h1 id="四-blog搭配文件服务器使用">四、Blog搭配文件服务器使用</h1>
+<p>Nginx不仅仅作为web站点使用，也可以当做一个文件共享的使用，索引目录列表提供用户下载文件。Nginx自带的autoindex模块ngx_http_autoindex_module功能很简单，该模块是默认安装的。</p>
+<h2 id="一gridea配置">（一）Gridea配置</h2>
+<p>首先，在下图的页面中，添加文件选项，并将其挂载至<code>/download</code>目录下，这样我们便可以通过<code>域名/download</code>或者直接在博客首页点击”文件“进入到文件服务器之中。<br>
+<img src="https://fbwenoll.eu.org/post-images/1682573687881.png" alt="文件服务器" loading="lazy"></p>
+<h2 id="二nginx配置">（二）Nginx配置</h2>
+<p>首先，通过<code>sudo vim /etc/nginx/nginx.conf</code>进入nginx的配置文件；<br>
+修改如下代码:</p>
+<pre><code class="language-shell">server{
+        listen  80 ;
+        server_name     100.122.130.115;
+        #ip/根目录 为Blog的静态页面
+        location / {
+                root    /home/fbwenoll/Blog;
+                }
+        #ip/download地址为文件服务器
+        location /download {
+            #文件服务器挂在在Downloads文件夹上
+            #改行代码请使用alias精确指定文件位置，不要用root命令（root指定的是上一层目录）
+            #切记不要把服务器挂载在/Blog目录下！Gridea上传时会将其覆盖。
+                alias   /home/fbwenoll/Downloads;
+            #打开autoindex
+                autoindex       on;
+            #显示文件大小确切大小，单位为byte。若关闭则单位变为Kb/Mb/Gb
+                autoindex_exact_size    off;
+            #文件显示格式，可以是html | xml | json | jsonp
+                autoindex_format        html;
+            #显示时间戳
+                autoindex_localtime     on;
+            #编码格式
+                charset utf-8;
+
+                }
+
+        error_page 404 /404.html;
+                location = /40x.html{
+                }
+        error_page 500 502 503 504 /50x.html;
+                location = /50x.html {
+                }
+        }
+</code></pre>
+<p>配置完成后通过<code>sudo nginx -s reload</code>重启nginx服务。</p>
+<p>修改完成后即可在博客页面访问到文件服务器，如下图所示。</p>
+<figure data-type="image" tabindex="3"><img src="https://fbwenoll.eu.org/post-images/1682574350402.png" alt="blog文件服务器2" loading="lazy"></figure>
+<h2 id="三文件的下载上传">（三）文件的下载/上传</h2>
+<ul>
+<li>文件上传可通过Xshell配合Xftp或者命令行<code>put</code>命令等实现。</li>
+<li>文件下载可直接访问<code>域名/download</code>或在博客页面点击”文件“实现文件的下载。</li>
+</ul>
+<h1 id="五-通过tailscale实现远程访问">五、通过TailScale实现远程访问</h1>
+<p>目前，我们所配置的blog+文件服务器只能用于同一局域网下，这里我们可以使用TailScale工具来实现虚拟局域网组网来打破这一限制。</p>
+<p><a href="https://tailscale.com/">Tailscale</a>是一种基于 WireGuard 的虚拟组网工具，它能帮助我们把安装了 Tailscale 服务的机器，都放到同一个局域网内，即公司或者家里的 PC 机器连到同一网络，甚至云服务器都能放到同一个局域网。因此基于此方案，我们可以实现异地博客访问。TailScale配置方法如下：</p>
+<ol>
+<li>在两台电脑上下载TailScale并登陆同一账号，可以使用微软/Github/谷歌等账号登陆。</li>
+<li>打开<a href="https://login.tailscale.com/admin/machines">Tail Sacle console</a>即可查看被绑定设备的虚拟IP地址，如下图所示。<br>
+<img src="https://fbwenoll.eu.org/post-images/1682834354470.png" alt="tailscale" loading="lazy"></li>
+</ol>
+<blockquote>
+<p>对于服务器而言，最好使用<code>systemctl enable tailscaled</code> 使tailscale服务可以自动启动。<br>
+如果使用TailScale，相对应的要将上文中设计IP地址的地方均替换为TailScale提供的虚拟IP地址。但是这样做会导致该博客只能在TailScale环境下使用，无法在局域网下使用。因此这里设置多个<code>server_mame</code>指向同一网站为宜。</p>
+</blockquote>
+<h2 id="一nginx配置">（一）Nginx配置</h2>
+<p>首先，通过<code>sudo vim /etc/nginx/nginx.conf</code>进入nginx的配置文件；<br>
+将上文中<code>Server{}</code>区块中的代码复制一份，并仅对IP进行修改:</p>
+<pre><code>server{
+        listen  80 ;
+        #这里添加tailscale虚拟ip，与局域网ip以空格分隔开
+        server_name     100.122.130.115 192.168.31.118;
+        location / {
+                root    /home/fbwenoll/Blog;
+                }
+        location /download {
+                alias   /home/fbwenoll/Downloads;
+                autoindex       on;
+                autoindex_exact_size    off;
+                autoindex_format        html;
+                autoindex_localtime     on;
+                charset utf-8;
+
+                }
+
+        error_page 404 /404.html;
+                location = /40x.html{
+                }
+        error_page 500 502 503 504 /50x.html;
+                location = /50x.html {
+                }
+        }
+</code></pre>
+<p>配置完成后通过<code>sudo nginx -s reload</code>重启nginx服务，大功告成。</p>
+<h1 id="六-结论">六、结论</h1>
+<p>经由上述配置后，可以实现：</p>
+<ul>
+<li>（虚拟）局域网内对博客的访问；</li>
+<li>（虚拟）局域网内通过Gridea实现对博客内容的远程更新。</li>
+<li>（虚拟）局域网内访问文件服务器对文件进行下载/上传。</li>
+<li></li>
+</ul>
+<p>在后续中如有必要，可购买域名通过DynDNS/No ip等工具将动态DNS绑定至特定域名内，来实现公网的访问。</p>
+<p>在后续维护中，也可将服务器的图形界面关闭以节省性能，通过shell工具远程SSH实现对服务器的维护。</p>
+<blockquote>
+<p>作者这里没有关闭图形界面，而是使用了VNC工具实现远程linux桌面访问，也可以使用TailScale虚拟组网。</p>
+</blockquote>
+<pre><code class="language-shell">关闭用户图形界面
+sudo systemctl set-default multi-user.target
+sudo reboot
+
+开启用户图形界面：
+sudo systemctl set-default graphical.target
+sudo reboot
+</code></pre>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>https://devwl.com/posts/nginx+hugo/ <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[论文总结：Cooperative Formation Control of Autonomous Underwater Vehicles: An Overview]]></title>
+        <id>https://fbwenoll.eu.org/post/lun-wen-zong-jie-cooperative-formation-control-of-autonomous-underwater-vehicles-an-overview/</id>
+        <link href="https://fbwenoll.eu.org/post/lun-wen-zong-jie-cooperative-formation-control-of-autonomous-underwater-vehicles-an-overview/">
+        </link>
+        <updated>2023-04-24T05:54:47.000Z</updated>
+        <content type="html"><![CDATA[<blockquote>
+<p>论文链接：<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></p>
+</blockquote>
+<h1 id="iintroduction">I.Introduction</h1>
+<ol>
+<li>AUV可分为UUV (unmanned undersea vehicles)和ROV(operated underwater vehicles)，前者指无需人进行操控的水下机器人，后者指需要线缆连接母船进行人工操作的水下机器人。</li>
+<li>根据控制结构，可以分为完全驱动系统以及欠驱动系统。</li>
+</ol>
+<ul>
+<li>完全驱动系统中，利用高增益的反馈来抵消系统本身的动态特性，让系统强制按照规划好的轨迹来运动。这带来的极大的能量损失，且环境适应性很差<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup>。</li>
+<li>欠驱动系统中，对于运动动力加以利用而不是抵消，消耗能量更少且运动会更自然，对环境的适应性更强，但是控制难度大，难以保证系统的稳定性<sup class="footnote-ref"><a href="#fn2" id="fnref2:1">[2:1]</a></sup>。</li>
+</ul>
+<ol start="3">
+<li>编队控制主要包含以下两个问题:<strong>编队调节控制(formation regulation control)<strong>和</strong>编队跟踪控制(formation tracking control)</strong>。要选择合适的水下机器人动力学与运动学模型以保证编队控制。</li>
+</ol>
+<ul>
+<li>编队调节控制：一组机器人编队称为刚体编队，使得在这个“刚体”在运动的过程中保持固定队形，但在受障碍物等影响时会灵活调节的控制过程称为 formation regulation control.</li>
+<li>编队跟踪控制：通过AUV之间的通讯，使得编队可以按照期望的轨迹进行运动的控制称为 formation tracking control.</li>
+</ul>
+<ol start="4">
+<li>在路径跟踪控制问题中，要根据“自由度”和“仅由规划器来控制的方向”来避免对一些方向的控制；对于位置控制而言，要引导AUV的实际路径与期望路径相重合且无时间限制。对于前向速度而言 ，要强制设定实际速度为期望速度。</li>
+<li>水下机器人的协同合作控制主要分为如下两类：</li>
+</ol>
+<ul>
+<li>
+<p><strong>多AUV的编队控制( formation control of multiple AUVs ).</strong><br>
+编队控制是指对于一组AUV的相对位姿的控制、以及允许这组AUV以整体的方式进行运动的问题。主要包含以下三个问题：<br>
+1. 对于可行队形的分配。<br>
+2. 保持以编队形态进行移动。<br>
+3. 不同编队的切换。<br>
+<img src="https://fbwenoll.eu.org/post-images/1682320160640.png" alt="编队控制" loading="lazy"></p>
+</li>
+<li>
+<p><strong>多AUV的集群控制( flocking control of multiple AUVs ).</strong><br>
+集群控制与编队控制相似，但相比于编队控制，集群控制中的AUV之间没有距离限制，而编队控制中各AUV间的距离是固定的。因此一般来说，研究的重点都放在编队控制之中。</p>
+</li>
+</ul>
+<h1 id="iiauv-dynamics">II.AUV dynamics</h1>
+<p><strong>在本文中该部分叙述较为简单，请转至“欠驱动自主水下航行器目标跟踪与编队控制策略研究”一文之总结</strong></p>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>https://link.springer.com/article/10.1007/s11633-016-1004-4 <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p>https://zhuanlan.zhihu.com/p/122334896 <a href="#fnref2" class="footnote-backref">↩︎</a> <a href="#fnref2:1" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[通过VsCode Remote WSL搭建linux C++ 环境]]></title>
+        <id>https://fbwenoll.eu.org/post/tong-guo-vscode-remote-wsl-da-jian-linux-c-huan-jing/</id>
+        <link href="https://fbwenoll.eu.org/post/tong-guo-vscode-remote-wsl-da-jian-linux-c-huan-jing/">
+        </link>
+        <updated>2023-01-12T05:21:37.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="安装编译工具链">安装编译工具链</h2>
+<ul>
+<li>安装编译工具</li>
+</ul>
+<pre><code class="language-bash">    sudo apt update
+    sudo apt-get install build-essential gbd
+    sudo apt-get install cmake
+</code></pre>
+<ul>
+<li>验证是否安装成功</li>
+</ul>
+<pre><code class="language-bash">    gcc --version
+    g++ --version
+    gbd --version
+    cmake--version
+</code></pre>
+<h2 id="安装vscode插件">安装Vscode插件</h2>
+<ul>
+<li>首先通过remote_wsl连接WSL2</li>
+<li>在连接WSL的状态下安装C++、Cmake、CmakeTools等一系列工具</li>
+</ul>
+<h2 id="创建工程">创建工程</h2>
+<ul>
+<li>创建如下目录<pre><code> Projects
+ └── Demo
+     ├── include
+     │   └── HelloWorld.h
+     ├── main.cpp
+     └── src
+         └── HelloWorld.cpp
+ 其中Projects为工作空间，Demo为项目
+</code></pre>
+</li>
+<li>F5选择工具链即可进行编译运行,但此时会报错，<strong>因为此时我们没有告诉vscode如何编译和调试程序</strong></li>
+</ul>
+<h2 id="更改tasksjson">更改Tasks.json</h2>
+<ul>
+<li>通过<code>ctrl+shift+p</code>打开命令窗口，输入<code>Configure Default Build Task</code>，并选择<code>g++</code>，即可在.vscode文件夹中看到<code>Tasks.json</code>文件。Tasks文件一般用于编译程序。</li>
+<li>args数组包含将传递给 g++ 的命令行参数（必须按照编译器预期的顺序指定）。类似于在命令行中运行<code>g++ -g.. -o.. -I..</code>的命令。</li>
+<li><code>-g</code>表示待编译的活动文件，对它进行编译。这里指<code>工作空间/Demo</code>下所有的<code>.cpp</code>文件</li>
+<li><code>-o</code>表示在文件被编译后生成与活动文件同名无后缀的可执行文件<code>${fileDirname}/${fileBasenameNoExtension}</code></li>
+<li><code>-I</code>表示编译程序按照-I指定的路进去搜索头文件。这里指<code>工作空间/Demo/include</code>下所包含的头文件<pre><code class="language-json">    &quot;args&quot;: [
+    &quot;-fdiagnostics-color=always&quot;,
+    &quot;-g&quot;,
+    &quot;${workspaceFolder}/Demo/**.cpp&quot;,//编译Demo目录下所有.cpp文件
+    &quot;${workspaceFolder}/Demo/src/**.cpp&quot;,//编译Demo/src目录下所有.cpp文件
+    &quot;-o&quot;,
+    &quot;${fileDirname}/${fileBasenameNoExtension}&quot;,
+    //添加如下内容以启用多文件编译
+    &quot;-I&quot;,
+    &quot;${workspaceFolder}/Demo/include&quot;,//头文件目录
+    &quot;-pthread&quot;
+],
+</code></pre>
+</li>
+</ul>
+<h2 id="生成launchjson">生成launch.json</h2>
+<ul>
+<li>通过<code>ctrl+shift+p</code>打开命令窗口，输入<code>g++ build and debug active file</code>，自动生成launch.json文件。launch文件一般用于调试程序。</li>
+</ul>
+<pre><code class="language-json">{
+    &quot;configurations&quot;: [
+        {
+            &quot;name&quot;: &quot;C/C++: g++ 生成和调试活动文件&quot;,
+            &quot;type&quot;: &quot;cppdbg&quot;,
+            &quot;request&quot;: &quot;launch&quot;,
+            &quot;program&quot;: &quot;${fileDirname}/${fileBasenameNoExtension}&quot;,
+            &quot;args&quot;: [],
+            &quot;stopAtEntry&quot;: false,
+            &quot;cwd&quot;: &quot;${fileDirname}&quot;,
+            &quot;environment&quot;: [],
+            &quot;externalConsole&quot;: false,
+            &quot;MIMode&quot;: &quot;gdb&quot;,
+            &quot;setupCommands&quot;: [
+                {
+                    &quot;description&quot;: &quot;为 gdb 启用整齐打印&quot;,
+                    &quot;text&quot;: &quot;-enable-pretty-printing&quot;,
+                    &quot;ignoreFailures&quot;: true
+                },
+                {
+                    &quot;description&quot;: &quot;将反汇编风格设置为 Intel&quot;,
+                    &quot;text&quot;: &quot;-gdb-set disassembly-flavor intel&quot;,
+                    &quot;ignoreFailures&quot;: true
+                }
+            ],
+            &quot;preLaunchTask&quot;: &quot;C/C++: g++ 生成活动文件&quot;,
+            &quot;miDebuggerPath&quot;: &quot;/usr/bin/gdb&quot;
+        }
+    ],
+    &quot;version&quot;: &quot;2.0.0&quot;
+}
+</code></pre>
+<ul>
+<li>点击F5即可进行build &amp; debug</li>
+</ul>
+<h2 id="reference">reference</h2>
+<p><a href="https://www.cnblogs.com/zhangkele/p/10043207.html">linux 下 g++编译程序时，-I（大写i） 与-L（大写l）-l(小写l) 的作用</a><br>
+<a href="https://zhuanlan.zhihu.com/p/394595507">详解Linux下使用vscode编译运行和调试C/C++</a></p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[如何创建自己的博客  Hugo框架为例]]></title>
+        <id>https://fbwenoll.eu.org/post/ru-he-chuang-jian-zi-ji-de-bo-ke-hugo-kuang-jia-wei-li/</id>
+        <link href="https://fbwenoll.eu.org/post/ru-he-chuang-jian-zi-ji-de-bo-ke-hugo-kuang-jia-wei-li/">
+        </link>
+        <updated>2023-01-12T05:19:04.000Z</updated>
+        <content type="html"><![CDATA[<p><strong>该方式适用于Ubuntu系统，Windows/Macos类似</strong></p>
+<h2 id="安装brew">安装Brew</h2>
+<ul>
+<li>首先需要确保已经安装git</li>
+</ul>
+<pre><code class="language-bash">sudo apt-get install build-essential curl file git
+</code></pre>
+<ul>
+<li>git clone安装brew</li>
+</ul>
+<pre><code class="language-bash">git clone https://github.com/Homebrew/brew ~/.linuxbrew/Homebrew
+mkdir ~/.linuxbrew/bin
+ln -s ~/.linuxbrew/Homebrew/bin/brew ~/.linuxbrew/bin
+eval $(~/.linuxbrew/bin/brew shellenv)
+</code></pre>
+<ul>
+<li>运行<code>brew</code>即可完成安装</li>
+</ul>
+<h2 id="安装hugo">安装hugo</h2>
+<ul>
+<li>通过brew安装hugo</li>
+</ul>
+<pre><code class="language-bash">brew install hugo
+</code></pre>
+<ul>
+<li>安装完成后可通过<code>hugo version</code>验证是否安装成功</li>
+</ul>
+<pre><code class="language-bash">hugo v0.109.0+extended linux/amd64 BuildDate=unknown
+</code></pre>
+<hr>
+<h2 id="初始化hugo博客">初始化hugo博客</h2>
+<ul>
+<li>创建hugo根目录</li>
+</ul>
+<pre><code class="language-bash">hugo new site blog
+</code></pre>
+<p>其中，blog为博客根目录的文件夹名称。<br>
+当终端中出现<code>congratulations</code>字眼时，说明创建成功。</p>
+<ul>
+<li>下载<a href="https://themes.gohugo.io/">hugo主题</a>，通过主题内的<code>git clone</code>进行安装</li>
+</ul>
+<pre><code class="language-bash">cd blog
+git clone git clone https://github.com/vaga/hugo-theme-m10c.git themes/m10c
+</code></pre>
+<p>下载完成后即可在<code>/blog/themes/</code>中看到下载的主题</p>
+<ul>
+<li>本地启动hugo博客进行测试</li>
+</ul>
+<pre><code class="language-bash">hugo server -t m10c --buildDrafts
+m10c为需要启用的主题
+</code></pre>
+<p>启动后即可通过<a href="http://localhost:1313/">本地地址</a>访问博客</p>
+<h2 id="创建博客文章">创建博客文章</h2>
+<p><strong>hugo博客一般通过<a href="https://markdown.com.cn/">markdown</a>格式进行编写</strong></p>
+<ul>
+<li>在post目录下创建一篇名为myblog的博客</li>
+</ul>
+<pre><code class="language-bash">hugo new post/myblog.md
+</code></pre>
+<p>创建完成后在<code>blog/content/post</code>即可看到<code>myblog.md</code>文件</p>
+<ul>
+<li>本地预览博客文章</li>
+</ul>
+<pre><code class="language-bash">cd&amp;&amp;cd blog
+hugo server -t m10c --buildDrafts
+</code></pre>
+<p><strong>测试无误后即可部署到远端</strong></p>
+<hr>
+<h2 id="部署至github仓库">部署至github仓库</h2>
+<p>创建github博客仓库，仓库名称<strong>必须为“用户名.github.io”</strong>，例如<code>FBwenoll.github.io</code><br>
+<strong>部署时Git工具必须已初始化完成，具体方法详见百度</strong></p>
+<ul>
+<li>生成public文件</li>
+</ul>
+<pre><code class="language-bash">hugo --theme=m10c --baseUrl=&quot;https://FBwenoll.github.io&quot; --buildDrafts
+</code></pre>
+<p>其中m10c为主题名称，url为博客的访问地址</p>
+<ul>
+<li>public文件夹中初始化git</li>
+</ul>
+<pre><code class="language-bash">cd public
+git init
+git add . 
+git commit -m &quot;第一次提交&quot;
+</code></pre>
+<ul>
+<li>关联github仓库</li>
+</ul>
+<pre><code class="language-bash">git remote add origin https://github.com/FBwenoll/FBwenoll.github.io.git
+</code></pre>
+<p>地址为前面新建仓库的地址</p>
+<ul>
+<li>推至远端</li>
+</ul>
+<pre><code class="language-bash">git push -u origin master
+输入用户名&amp;密码
+</code></pre>
+<p>此时若出现<code>Support for password authentication was removed on...</code>等字眼，则需要新建KEY进行导入。</p>
+<ol>
+<li>进入<code>github-&gt;settings-&gt; Developer settings-&gt;Personal access tokens-&gt;generate a new token</code></li>
+<li>复制生成的KEY</li>
+<li>
+<pre><code class="language-bash"> git remote set-url origin https://刚刚复制的口令@github.com/FBwenoll/FBwenoll.github.io.git
+</code></pre>
+</li>
+</ol>
+<ul>
+<li>再次尝试<code>git push</code>即可成功</li>
+</ul>
+<h2 id="reference">Reference</h2>
+<p><a href="https://www.bilibili.com/video/BV1q4411i7gL">手把手教你从0开始搭建自己的个人博客 |第二种姿势 | hugo</a></p>
+]]></content>
+    </entry>
+</feed>

@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>通过VsCode Remote WSL搭建linux C++ 环境 | FBwenoll&#39;s Blog</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://fbwenoll.eu.org/favicon.ico?v=1697384461365">
+<link rel="stylesheet" href="https://fbwenoll.eu.org/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="安装编译工具链
+
+安装编译工具
+
+    sudo apt update
+    sudo apt-get install build-essential gbd
+    sudo apt-get install cmake
+
+
+验证是否安..." />
+    <meta name="keywords" content="Linux,踩坑记录" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://fbwenoll.eu.org">
+        <img src="https://fbwenoll.eu.org/images/avatar.png?v=1697384461365" class="site-logo">
+        <h1 class="site-title">FBwenoll&#39;s Blog</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+        
+          <a href="/download" class="site-nav">
+            文件
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/FBwenoll?tab=repositories" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      这里是FBwenoll的博客。
+    </div>
+    <div class="site-footer">
+      in  <a href="https://www.usst.edu.cn/" target="_blank">USST</a> | <a class="rss" href="https://fbwenoll.eu.org/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">通过VsCode Remote WSL搭建linux C++ 环境</h2>
+            <div class="post-date">2023-01-12</div>
+            
+              <div class="feature-container" style="background-image: url('https://fbwenoll.eu.org/post-images/tong-guo-vscode-remote-wsl-da-jian-linux-c-huan-jing.png')">
+              </div>
+            
+            <div class="post-content" v-pre>
+              <h2 id="安装编译工具链">安装编译工具链</h2>
+<ul>
+<li>安装编译工具</li>
+</ul>
+<pre><code class="language-bash">    sudo apt update
+    sudo apt-get install build-essential gbd
+    sudo apt-get install cmake
+</code></pre>
+<ul>
+<li>验证是否安装成功</li>
+</ul>
+<pre><code class="language-bash">    gcc --version
+    g++ --version
+    gbd --version
+    cmake--version
+</code></pre>
+<h2 id="安装vscode插件">安装Vscode插件</h2>
+<ul>
+<li>首先通过remote_wsl连接WSL2</li>
+<li>在连接WSL的状态下安装C++、Cmake、CmakeTools等一系列工具</li>
+</ul>
+<h2 id="创建工程">创建工程</h2>
+<ul>
+<li>创建如下目录<pre><code> Projects
+ └── Demo
+     ├── include
+     │   └── HelloWorld.h
+     ├── main.cpp
+     └── src
+         └── HelloWorld.cpp
+ 其中Projects为工作空间，Demo为项目
+</code></pre>
+</li>
+<li>F5选择工具链即可进行编译运行,但此时会报错，<strong>因为此时我们没有告诉vscode如何编译和调试程序</strong></li>
+</ul>
+<h2 id="更改tasksjson">更改Tasks.json</h2>
+<ul>
+<li>通过<code>ctrl+shift+p</code>打开命令窗口，输入<code>Configure Default Build Task</code>，并选择<code>g++</code>，即可在.vscode文件夹中看到<code>Tasks.json</code>文件。Tasks文件一般用于编译程序。</li>
+<li>args数组包含将传递给 g++ 的命令行参数（必须按照编译器预期的顺序指定）。类似于在命令行中运行<code>g++ -g.. -o.. -I..</code>的命令。</li>
+<li><code>-g</code>表示待编译的活动文件，对它进行编译。这里指<code>工作空间/Demo</code>下所有的<code>.cpp</code>文件</li>
+<li><code>-o</code>表示在文件被编译后生成与活动文件同名无后缀的可执行文件<code>${fileDirname}/${fileBasenameNoExtension}</code></li>
+<li><code>-I</code>表示编译程序按照-I指定的路进去搜索头文件。这里指<code>工作空间/Demo/include</code>下所包含的头文件<pre><code class="language-json">    &quot;args&quot;: [
+    &quot;-fdiagnostics-color=always&quot;,
+    &quot;-g&quot;,
+    &quot;${workspaceFolder}/Demo/**.cpp&quot;,//编译Demo目录下所有.cpp文件
+    &quot;${workspaceFolder}/Demo/src/**.cpp&quot;,//编译Demo/src目录下所有.cpp文件
+    &quot;-o&quot;,
+    &quot;${fileDirname}/${fileBasenameNoExtension}&quot;,
+    //添加如下内容以启用多文件编译
+    &quot;-I&quot;,
+    &quot;${workspaceFolder}/Demo/include&quot;,//头文件目录
+    &quot;-pthread&quot;
+],
+</code></pre>
+</li>
+</ul>
+<h2 id="生成launchjson">生成launch.json</h2>
+<ul>
+<li>通过<code>ctrl+shift+p</code>打开命令窗口，输入<code>g++ build and debug active file</code>，自动生成launch.json文件。launch文件一般用于调试程序。</li>
+</ul>
+<pre><code class="language-json">{
+    &quot;configurations&quot;: [
+        {
+            &quot;name&quot;: &quot;C/C++: g++ 生成和调试活动文件&quot;,
+            &quot;type&quot;: &quot;cppdbg&quot;,
+            &quot;request&quot;: &quot;launch&quot;,
+            &quot;program&quot;: &quot;${fileDirname}/${fileBasenameNoExtension}&quot;,
+            &quot;args&quot;: [],
+            &quot;stopAtEntry&quot;: false,
+            &quot;cwd&quot;: &quot;${fileDirname}&quot;,
+            &quot;environment&quot;: [],
+            &quot;externalConsole&quot;: false,
+            &quot;MIMode&quot;: &quot;gdb&quot;,
+            &quot;setupCommands&quot;: [
+                {
+                    &quot;description&quot;: &quot;为 gdb 启用整齐打印&quot;,
+                    &quot;text&quot;: &quot;-enable-pretty-printing&quot;,
+                    &quot;ignoreFailures&quot;: true
+                },
+                {
+                    &quot;description&quot;: &quot;将反汇编风格设置为 Intel&quot;,
+                    &quot;text&quot;: &quot;-gdb-set disassembly-flavor intel&quot;,
+                    &quot;ignoreFailures&quot;: true
+                }
+            ],
+            &quot;preLaunchTask&quot;: &quot;C/C++: g++ 生成活动文件&quot;,
+            &quot;miDebuggerPath&quot;: &quot;/usr/bin/gdb&quot;
+        }
+    ],
+    &quot;version&quot;: &quot;2.0.0&quot;
+}
+</code></pre>
+<ul>
+<li>点击F5即可进行build &amp; debug</li>
+</ul>
+<h2 id="reference">reference</h2>
+<p><a href="https://www.cnblogs.com/zhangkele/p/10043207.html">linux 下 g++编译程序时，-I（大写i） 与-L（大写l）-l(小写l) 的作用</a><br>
+<a href="https://zhuanlan.zhihu.com/p/394595507">详解Linux下使用vscode编译运行和调试C/C++</a></p>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://fbwenoll.eu.org/tag/gkSbTsQEt/" class="tag">
+                    Linux
+                  </a>
+                
+                  <a href="https://fbwenoll.eu.org/tag/6GDr42jDJ/" class="tag">
+                    踩坑记录
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://fbwenoll.eu.org/post/ru-he-chuang-jian-zi-ji-de-bo-ke-hugo-kuang-jia-wei-li/">
+                  <h3 class="post-title">
+                    如何创建自己的博客  Hugo框架为例
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+
+  </body>
+</html>

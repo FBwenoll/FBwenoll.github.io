@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>如何创建自己的博客  Hugo框架为例 | FBwenoll&#39;s Blog</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://fbwenoll.eu.org/favicon.ico?v=1697384461365">
+<link rel="stylesheet" href="https://fbwenoll.eu.org/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="该方式适用于Ubuntu系统，Windows/Macos类似
+安装Brew
+
+首先需要确保已经安装git
+
+sudo apt-get install build-essential curl file git
+
+
+git clone安装br..." />
+    <meta name="keywords" content="踩坑记录" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://fbwenoll.eu.org">
+        <img src="https://fbwenoll.eu.org/images/avatar.png?v=1697384461365" class="site-logo">
+        <h1 class="site-title">FBwenoll&#39;s Blog</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+        
+          <a href="/download" class="site-nav">
+            文件
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/FBwenoll?tab=repositories" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      这里是FBwenoll的博客。
+    </div>
+    <div class="site-footer">
+      in  <a href="https://www.usst.edu.cn/" target="_blank">USST</a> | <a class="rss" href="https://fbwenoll.eu.org/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">如何创建自己的博客  Hugo框架为例</h2>
+            <div class="post-date">2023-01-12</div>
+            
+              <div class="feature-container" style="background-image: url('https://fbwenoll.eu.org/post-images/ru-he-chuang-jian-zi-ji-de-bo-ke-hugo-kuang-jia-wei-li.png')">
+              </div>
+            
+            <div class="post-content" v-pre>
+              <p><strong>该方式适用于Ubuntu系统，Windows/Macos类似</strong></p>
+<h2 id="安装brew">安装Brew</h2>
+<ul>
+<li>首先需要确保已经安装git</li>
+</ul>
+<pre><code class="language-bash">sudo apt-get install build-essential curl file git
+</code></pre>
+<ul>
+<li>git clone安装brew</li>
+</ul>
+<pre><code class="language-bash">git clone https://github.com/Homebrew/brew ~/.linuxbrew/Homebrew
+mkdir ~/.linuxbrew/bin
+ln -s ~/.linuxbrew/Homebrew/bin/brew ~/.linuxbrew/bin
+eval $(~/.linuxbrew/bin/brew shellenv)
+</code></pre>
+<ul>
+<li>运行<code>brew</code>即可完成安装</li>
+</ul>
+<h2 id="安装hugo">安装hugo</h2>
+<ul>
+<li>通过brew安装hugo</li>
+</ul>
+<pre><code class="language-bash">brew install hugo
+</code></pre>
+<ul>
+<li>安装完成后可通过<code>hugo version</code>验证是否安装成功</li>
+</ul>
+<pre><code class="language-bash">hugo v0.109.0+extended linux/amd64 BuildDate=unknown
+</code></pre>
+<hr>
+<h2 id="初始化hugo博客">初始化hugo博客</h2>
+<ul>
+<li>创建hugo根目录</li>
+</ul>
+<pre><code class="language-bash">hugo new site blog
+</code></pre>
+<p>其中，blog为博客根目录的文件夹名称。<br>
+当终端中出现<code>congratulations</code>字眼时，说明创建成功。</p>
+<ul>
+<li>下载<a href="https://themes.gohugo.io/">hugo主题</a>，通过主题内的<code>git clone</code>进行安装</li>
+</ul>
+<pre><code class="language-bash">cd blog
+git clone git clone https://github.com/vaga/hugo-theme-m10c.git themes/m10c
+</code></pre>
+<p>下载完成后即可在<code>/blog/themes/</code>中看到下载的主题</p>
+<ul>
+<li>本地启动hugo博客进行测试</li>
+</ul>
+<pre><code class="language-bash">hugo server -t m10c --buildDrafts
+m10c为需要启用的主题
+</code></pre>
+<p>启动后即可通过<a href="http://localhost:1313/">本地地址</a>访问博客</p>
+<h2 id="创建博客文章">创建博客文章</h2>
+<p><strong>hugo博客一般通过<a href="https://markdown.com.cn/">markdown</a>格式进行编写</strong></p>
+<ul>
+<li>在post目录下创建一篇名为myblog的博客</li>
+</ul>
+<pre><code class="language-bash">hugo new post/myblog.md
+</code></pre>
+<p>创建完成后在<code>blog/content/post</code>即可看到<code>myblog.md</code>文件</p>
+<ul>
+<li>本地预览博客文章</li>
+</ul>
+<pre><code class="language-bash">cd&amp;&amp;cd blog
+hugo server -t m10c --buildDrafts
+</code></pre>
+<p><strong>测试无误后即可部署到远端</strong></p>
+<hr>
+<h2 id="部署至github仓库">部署至github仓库</h2>
+<p>创建github博客仓库，仓库名称<strong>必须为“用户名.github.io”</strong>，例如<code>FBwenoll.github.io</code><br>
+<strong>部署时Git工具必须已初始化完成，具体方法详见百度</strong></p>
+<ul>
+<li>生成public文件</li>
+</ul>
+<pre><code class="language-bash">hugo --theme=m10c --baseUrl=&quot;https://FBwenoll.github.io&quot; --buildDrafts
+</code></pre>
+<p>其中m10c为主题名称，url为博客的访问地址</p>
+<ul>
+<li>public文件夹中初始化git</li>
+</ul>
+<pre><code class="language-bash">cd public
+git init
+git add . 
+git commit -m &quot;第一次提交&quot;
+</code></pre>
+<ul>
+<li>关联github仓库</li>
+</ul>
+<pre><code class="language-bash">git remote add origin https://github.com/FBwenoll/FBwenoll.github.io.git
+</code></pre>
+<p>地址为前面新建仓库的地址</p>
+<ul>
+<li>推至远端</li>
+</ul>
+<pre><code class="language-bash">git push -u origin master
+输入用户名&amp;密码
+</code></pre>
+<p>此时若出现<code>Support for password authentication was removed on...</code>等字眼，则需要新建KEY进行导入。</p>
+<ol>
+<li>进入<code>github-&gt;settings-&gt; Developer settings-&gt;Personal access tokens-&gt;generate a new token</code></li>
+<li>复制生成的KEY</li>
+<li>
+<pre><code class="language-bash"> git remote set-url origin https://刚刚复制的口令@github.com/FBwenoll/FBwenoll.github.io.git
+</code></pre>
+</li>
+</ol>
+<ul>
+<li>再次尝试<code>git push</code>即可成功</li>
+</ul>
+<h2 id="reference">Reference</h2>
+<p><a href="https://www.bilibili.com/video/BV1q4411i7gL">手把手教你从0开始搭建自己的个人博客 |第二种姿势 | hugo</a></p>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://fbwenoll.eu.org/tag/6GDr42jDJ/" class="tag">
+                    踩坑记录
+                  </a>
+                
+              </div>
+            
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+
+  </body>
+</html>

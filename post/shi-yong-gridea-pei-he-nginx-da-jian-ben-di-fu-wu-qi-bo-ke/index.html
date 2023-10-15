@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>使用Gridea配合Nginx搭建本地服务器博客 | FBwenoll&#39;s Blog</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://fbwenoll.eu.org/favicon.ico?v=1697384461365">
+<link rel="stylesheet" href="https://fbwenoll.eu.org/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="本文使用中国移动CM311-1a机顶盒配合Ubuntu系统作为博客的服务器，通过本地Gridea SFTP的方法将静态网页上传至服务器内，并通过Nginx实现博客的局域网访问。
+
+一、Gridea的安装
+Gridea 是一个静态博客写作的跨..." />
+    <meta name="keywords" content="踩坑记录,Gridea" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://fbwenoll.eu.org">
+        <img src="https://fbwenoll.eu.org/images/avatar.png?v=1697384461365" class="site-logo">
+        <h1 class="site-title">FBwenoll&#39;s Blog</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+        
+          <a href="/download" class="site-nav">
+            文件
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/FBwenoll?tab=repositories" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      这里是FBwenoll的博客。
+    </div>
+    <div class="site-footer">
+      in  <a href="https://www.usst.edu.cn/" target="_blank">USST</a> | <a class="rss" href="https://fbwenoll.eu.org/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">使用Gridea配合Nginx搭建本地服务器博客</h2>
+            <div class="post-date">2023-04-25</div>
+            
+              <div class="feature-container" style="background-image: url('https://fbwenoll.eu.org/post-images/shi-yong-gridea-pei-he-nginx-da-jian-ben-di-fu-wu-qi-bo-ke.png')">
+              </div>
+            
+            <div class="post-content" v-pre>
+              <p>本文使用中国移动CM311-1a机顶盒配合Ubuntu系统作为博客的服务器，通过本地Gridea SFTP的方法将静态网页上传至服务器内，并通过Nginx实现博客的局域网访问。</p>
+<!-- more -->
+<h1 id="一-gridea的安装">一、Gridea的安装</h1>
+<p>Gridea 是一个静态博客写作的跨平台开源客户端，使用该平台可以避免诸如Hugo、Hexo等静态博客生成工具的繁琐过程。且对于Git等操作可以实现图形化配置，一键Push至云端。这是其<a href="https://github.com/getgridea/gridea">开源仓库链接</a>。<br>
+其使用教程可根据官方Wiki配合菜单进行学习，这里着重记录一下有关Gridea SFTP上传至服务器的操作：</p>
+<ol>
+<li>在服务器终端或路由器管理页面中获取服务器的IP地址，这里以192.168.0.16为例。<img src="https://fbwenoll.eu.org/post-images/1682415211893.png" alt="服务器IP地址" loading="lazy"></li>
+<li>在Gridea客户端中，选择远程-&gt;SFTP，如图一所示。<br>
+在<strong>域名</strong>中输入<code>http://</code>+方才查询到的IP地址 ，如图中所示。<br>
+对于<strong>端口</strong>选项而言，一般来说默认为22端口。<br>
+<strong>Server</strong>一栏同样为IP地址。<br>
+<strong>Username</strong>为服务器端Ubuntu的登陆用户名，同理<strong>Password</strong>为该用户名对应的密码。<br>
+<strong>Remote Path</strong>为Gridea编译所得的静态网页将要发送至的地址，在这里作者设置为/home/username/Blog.</li>
+</ol>
+<blockquote>
+<p>其他路径也无妨，只要在后续Nginx配置中同时进行修改即可。</p>
+</blockquote>
+<p>至此，本地的Gridea配置暂时告一段落。</p>
+<figure data-type="image" tabindex="1"><img src="https://fbwenoll.eu.org/post-images/1682415268458.png" alt="图1 Gridea客户端" loading="lazy"></figure>
+<h1 id="二-服务器中nginx的安装">二、服务器中Nginx的安装</h1>
+<h2 id="1ssh配置">（1）SSH配置</h2>
+<p>SFTP是SSH的一部分，且对于linux服务器来说，通过SSH进行远程访问才是常态。因此在这里首先通过<code>systemctl status sshd</code>命令检查服务器中是否装有SSH。</p>
+<blockquote>
+<p>一般来说，Ubuntu系统默认会带有SSH，若系统未装有SSH，通过<code>apt</code>命令即可进行安装。</p>
+</blockquote>
+<ul>
+<li>通过<code>sudo ufw enable</code>开启防火墙。</li>
+<li>通过<code>sudo ufw allow ssh</code>打开SSH端口（默认为22）。</li>
+<li>通过<code>sudo systemctl enable ssh</code>设置SSH为开机自启，以便后续进行远程访问/传输。</li>
+</ul>
+<h2 id="2nginx安装及配置">（2）Nginx安装及配置</h2>
+<ol>
+<li>通过<code>apt</code>命令安装nginx<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>。</li>
+<li>在<code>/home/username/</code>下创建Blog文件夹用来放置静态网页的文件。
+<blockquote>
+<p>创建目录要与上文中Gridea中所配置相同。</p>
+</blockquote>
+</li>
+<li>通过<code>vim /etc/nginx/nginx.conf</code>打开Nginx配置文件。在<code>http{}</code>内添加如下代码即可。<pre><code class="language-shell"> http{
+     server {
+         listen   80; //端口
+         server_name 192.168.0.16; 	//访问的域名(本地博客这里设置为服务器的IP地址)
+         root    /home/username/Blog;  //网站文件存放目录，要与上文所创建目录相同。
+         location / {}
+         error_page 404 /404.html;
+             location = /40x.html { }
+         error_page 500 502 503 504 /50x.html;
+             location = /50x.html { }
+         }
+     }
+</code></pre>
+</li>
+<li>设置完成后，通过<code>sudo nginx -s reload</code>命令来重启Nginx。重启完成后，查看是否有error/warning。若无即可在浏览器内通过<code>192.168.0.16</code>来验证nginx是否安装成功。</li>
+</ol>
+<h1 id="三-gridea上传验证">三、Gridea上传验证</h1>
+<p>在完成上述步骤后，在图一Gridea页面中通过左下角_检测远程连接_即可验证SFTP是否可以跑通。</p>
+<blockquote>
+<p>关键在于Gridea中的配置及服务器端Blog目录的创建，与Nginx配置无关。</p>
+</blockquote>
+<p>验证成功后即可点击图一中的上传按钮，将静态网页上传至服务器。</p>
+<p>在本地端浏览器中通过<code>192.168.0.16</code>即可实现对博客网页的访问，如图二所示。</p>
+<figure data-type="image" tabindex="2"><img src="https://fbwenoll.eu.org/post-images/1682417654403.png" alt="图二 博客网页访问" loading="lazy"></figure>
+<h1 id="四-blog搭配文件服务器使用">四、Blog搭配文件服务器使用</h1>
+<p>Nginx不仅仅作为web站点使用，也可以当做一个文件共享的使用，索引目录列表提供用户下载文件。Nginx自带的autoindex模块ngx_http_autoindex_module功能很简单，该模块是默认安装的。</p>
+<h2 id="一gridea配置">（一）Gridea配置</h2>
+<p>首先，在下图的页面中，添加文件选项，并将其挂载至<code>/download</code>目录下，这样我们便可以通过<code>域名/download</code>或者直接在博客首页点击”文件“进入到文件服务器之中。<br>
+<img src="https://fbwenoll.eu.org/post-images/1682573687881.png" alt="文件服务器" loading="lazy"></p>
+<h2 id="二nginx配置">（二）Nginx配置</h2>
+<p>首先，通过<code>sudo vim /etc/nginx/nginx.conf</code>进入nginx的配置文件；<br>
+修改如下代码:</p>
+<pre><code class="language-shell">server{
+        listen  80 ;
+        server_name     100.122.130.115;
+        #ip/根目录 为Blog的静态页面
+        location / {
+                root    /home/fbwenoll/Blog;
+                }
+        #ip/download地址为文件服务器
+        location /download {
+            #文件服务器挂在在Downloads文件夹上
+            #改行代码请使用alias精确指定文件位置，不要用root命令（root指定的是上一层目录）
+            #切记不要把服务器挂载在/Blog目录下！Gridea上传时会将其覆盖。
+                alias   /home/fbwenoll/Downloads;
+            #打开autoindex
+                autoindex       on;
+            #显示文件大小确切大小，单位为byte。若关闭则单位变为Kb/Mb/Gb
+                autoindex_exact_size    off;
+            #文件显示格式，可以是html | xml | json | jsonp
+                autoindex_format        html;
+            #显示时间戳
+                autoindex_localtime     on;
+            #编码格式
+                charset utf-8;
+
+                }
+
+        error_page 404 /404.html;
+                location = /40x.html{
+                }
+        error_page 500 502 503 504 /50x.html;
+                location = /50x.html {
+                }
+        }
+</code></pre>
+<p>配置完成后通过<code>sudo nginx -s reload</code>重启nginx服务。</p>
+<p>修改完成后即可在博客页面访问到文件服务器，如下图所示。</p>
+<figure data-type="image" tabindex="3"><img src="https://fbwenoll.eu.org/post-images/1682574350402.png" alt="blog文件服务器2" loading="lazy"></figure>
+<h2 id="三文件的下载上传">（三）文件的下载/上传</h2>
+<ul>
+<li>文件上传可通过Xshell配合Xftp或者命令行<code>put</code>命令等实现。</li>
+<li>文件下载可直接访问<code>域名/download</code>或在博客页面点击”文件“实现文件的下载。</li>
+</ul>
+<h1 id="五-通过tailscale实现远程访问">五、通过TailScale实现远程访问</h1>
+<p>目前，我们所配置的blog+文件服务器只能用于同一局域网下，这里我们可以使用TailScale工具来实现虚拟局域网组网来打破这一限制。</p>
+<p><a href="https://tailscale.com/">Tailscale</a>是一种基于 WireGuard 的虚拟组网工具，它能帮助我们把安装了 Tailscale 服务的机器，都放到同一个局域网内，即公司或者家里的 PC 机器连到同一网络，甚至云服务器都能放到同一个局域网。因此基于此方案，我们可以实现异地博客访问。TailScale配置方法如下：</p>
+<ol>
+<li>在两台电脑上下载TailScale并登陆同一账号，可以使用微软/Github/谷歌等账号登陆。</li>
+<li>打开<a href="https://login.tailscale.com/admin/machines">Tail Sacle console</a>即可查看被绑定设备的虚拟IP地址，如下图所示。<br>
+<img src="https://fbwenoll.eu.org/post-images/1682834354470.png" alt="tailscale" loading="lazy"></li>
+</ol>
+<blockquote>
+<p>对于服务器而言，最好使用<code>systemctl enable tailscaled</code> 使tailscale服务可以自动启动。<br>
+如果使用TailScale，相对应的要将上文中设计IP地址的地方均替换为TailScale提供的虚拟IP地址。但是这样做会导致该博客只能在TailScale环境下使用，无法在局域网下使用。因此这里设置多个<code>server_mame</code>指向同一网站为宜。</p>
+</blockquote>
+<h2 id="一nginx配置">（一）Nginx配置</h2>
+<p>首先，通过<code>sudo vim /etc/nginx/nginx.conf</code>进入nginx的配置文件；<br>
+将上文中<code>Server{}</code>区块中的代码复制一份，并仅对IP进行修改:</p>
+<pre><code>server{
+        listen  80 ;
+        #这里添加tailscale虚拟ip，与局域网ip以空格分隔开
+        server_name     100.122.130.115 192.168.31.118;
+        location / {
+                root    /home/fbwenoll/Blog;
+                }
+        location /download {
+                alias   /home/fbwenoll/Downloads;
+                autoindex       on;
+                autoindex_exact_size    off;
+                autoindex_format        html;
+                autoindex_localtime     on;
+                charset utf-8;
+
+                }
+
+        error_page 404 /404.html;
+                location = /40x.html{
+                }
+        error_page 500 502 503 504 /50x.html;
+                location = /50x.html {
+                }
+        }
+</code></pre>
+<p>配置完成后通过<code>sudo nginx -s reload</code>重启nginx服务，大功告成。</p>
+<h1 id="六-结论">六、结论</h1>
+<p>经由上述配置后，可以实现：</p>
+<ul>
+<li>（虚拟）局域网内对博客的访问；</li>
+<li>（虚拟）局域网内通过Gridea实现对博客内容的远程更新。</li>
+<li>（虚拟）局域网内访问文件服务器对文件进行下载/上传。</li>
+<li></li>
+</ul>
+<p>在后续中如有必要，可购买域名通过DynDNS/No ip等工具将动态DNS绑定至特定域名内，来实现公网的访问。</p>
+<p>在后续维护中，也可将服务器的图形界面关闭以节省性能，通过shell工具远程SSH实现对服务器的维护。</p>
+<blockquote>
+<p>作者这里没有关闭图形界面，而是使用了VNC工具实现远程linux桌面访问，也可以使用TailScale虚拟组网。</p>
+</blockquote>
+<pre><code class="language-shell">关闭用户图形界面
+sudo systemctl set-default multi-user.target
+sudo reboot
+
+开启用户图形界面：
+sudo systemctl set-default graphical.target
+sudo reboot
+</code></pre>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>https://devwl.com/posts/nginx+hugo/ <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://fbwenoll.eu.org/tag/6GDr42jDJ/" class="tag">
+                    踩坑记录
+                  </a>
+                
+                  <a href="https://fbwenoll.eu.org/tag/jTndt2Aen/" class="tag">
+                    Gridea
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://fbwenoll.eu.org/post/lun-wen-zong-jie-cooperative-formation-control-of-autonomous-underwater-vehicles-an-overview/">
+                  <h3 class="post-title">
+                    论文总结：Cooperative Formation Control of Autonomous Underwater Vehicles: An Overview
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+
+  </body>
+</html>

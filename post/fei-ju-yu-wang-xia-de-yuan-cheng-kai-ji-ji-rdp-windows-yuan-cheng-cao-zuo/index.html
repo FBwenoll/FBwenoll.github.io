@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>非局域网下的远程开机及RDP Windows远程操作 | FBwenoll&#39;s Blog</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://fbwenoll.eu.org/favicon.ico?v=1697384461365">
+<link rel="stylesheet" href="https://fbwenoll.eu.org/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="本文通过ToDesk/Linux etherwake实现Windows Wake On Lan，并通过Windows专业版自带mstsc工具配合虚拟局域网TailScale实现电脑的远程操作。
+
+一、RDP mstsc工具配置
+微软自带的m..." />
+    <meta name="keywords" content="远程桌面,Windows,Linux,踩坑记录" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://fbwenoll.eu.org">
+        <img src="https://fbwenoll.eu.org/images/avatar.png?v=1697384461365" class="site-logo">
+        <h1 class="site-title">FBwenoll&#39;s Blog</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+        
+          <a href="/download" class="site-nav">
+            文件
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/FBwenoll?tab=repositories" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      这里是FBwenoll的博客。
+    </div>
+    <div class="site-footer">
+      in  <a href="https://www.usst.edu.cn/" target="_blank">USST</a> | <a class="rss" href="https://fbwenoll.eu.org/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">非局域网下的远程开机及RDP Windows远程操作</h2>
+            <div class="post-date">2023-04-30</div>
+            
+              <div class="feature-container" style="background-image: url('https://fbwenoll.eu.org/post-images/fei-ju-yu-wang-xia-de-yuan-cheng-kai-ji-ji-rdp-windows-yuan-cheng-cao-zuo.jpg')">
+              </div>
+            
+            <div class="post-content" v-pre>
+              <p>本文通过ToDesk/Linux etherwake实现Windows Wake On Lan，并通过Windows专业版自带mstsc工具配合虚拟局域网TailScale实现电脑的远程操作。</p>
+<!-- more -->
+<h1 id="一-rdp-mstsc工具配置">一、RDP mstsc工具配置</h1>
+<p>微软自带的mstsc是一个非常好用的工具，相比于TeamViewer之流的工具，mstsc并不是通过录屏的方式来实现远程操作，而是通过微软自家的RDP协议将GDI命令参数传送至客户端再进行渲染，只传送命令不传送画面，因此对网络要求较低，延迟也较小。<br>
+与此同时，mstsc还可实现客户端硬盘、摄像头等设备挂载至远程设备（远程操作的电脑可以调用手边电脑的摄像头、话筒甚至是硬盘）。<br>
+作为一个surface用户，当我使用surface作为客户端时，它甚至支持手写笔及触控输入。😃</p>
+<blockquote>
+<p>这一步可以参考<a href="https://www.bilibili.com/video/BV1YM4y1z7wE/?spm_id_from=333.999.0.0">晨钟酱的视频</a>。</p>
+</blockquote>
+<h2 id="1tailscale组建虚拟局域网">（1）TailScale组建虚拟局域网</h2>
+<p>以往文章中也略作介绍（上述视频链接中有详细介绍），该软件可以将同一账户登陆下的设备组件至同一虚拟局域网之中。通过这一方法，我们可以不通过公网IP的方法便可以在外访问内网。</p>
+<ol>
+<li>在两台电脑上下载TailScale并登陆同一账号，可以使用微软/Github/谷歌等账号登陆。</li>
+<li>打开<a href="https://login.tailscale.com/admin/machines">Tail Sacle console</a>即可查看被绑定设备的虚拟IP地址，如下图所示。<br>
+<img src="https://fbwenoll.eu.org/post-images/1682834354470.png" alt="tailscale" loading="lazy"></li>
+<li>在被控端电脑打开设置-&gt;系统-&gt;远程桌面 中打开该选项。<br>
+<img src="https://fbwenoll.eu.org/post-images/1682834480293.png" alt="远程桌面" loading="lazy"><br>
+就此，被控端设置完成。</li>
+<li>在客户端打开远程桌面连接(mstsc)，在计算机中填写TailScale虚拟IP地址，用户名中填写被控机器所登录的微软账户名称（一般为Outlook邮箱），密码则为微软账户密码。<br>
+<img src="https://fbwenoll.eu.org/post-images/1682834808106.png" alt="mstsc登陆" loading="lazy"></li>
+</ol>
+<h2 id="2rdp优化配置">（2）RDP优化配置</h2>
+<p>这里主要总结一下如何进行RDP远程桌面的设置优化<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>。</p>
+<h3 id="显卡加速">显卡加速</h3>
+<ol>
+<li>首先打开远程主机上的组策略（Win+R打开运行，输入gpedit.msc）。</li>
+<li>依次找到计算机配置-&gt;管理模板-&gt;Windows组件-&gt;远程桌面服务-&gt;远程桌面会话主机-&gt;远程会话环境。</li>
+<li>在右边选择将硬件图形适配器应用于所有远程桌面服务会话。<br>
+<img src="https://fbwenoll.eu.org/post-images/1682791812064.png" alt="显卡加速" loading="lazy"></li>
+<li>右键编辑，选择已启用，确定保存并重启。</li>
+</ol>
+<h3 id="开启remotefx-usb重定向">开启RemoteFX USB重定向</h3>
+<ol>
+<li>RDP默认支持共享存储设备，我们可以让它共享大多数的USB设备。</li>
+<li>在客户端电脑上，打开组策略（Win+R打开运行，输入gpedit.msc）。</li>
+<li>依次找到 计算机配置-&gt;管理模板-&gt;Windows组件-&gt;远程桌面服务-&gt;远程桌面会话客户端-&gt;RemoteFX USB 设备重定向。<br>
+<img src="https://fbwenoll.eu.org/post-images/1682791946333.png" alt="RemoteFX USB" loading="lazy"></li>
+<li>选择右边的允许此计算机中受支持的其他 RemoteFX USB 设备的 RDP 重定向，设置为已启用，然后将选项中的RemoteFX USB重定向访问权限”设置为“管理员和用户。</li>
+<li>确定保存，重启生效。<br>
+重启后打开远程桌面客户端，点击显示选项，在本地资源里的本地设备和资源的详细信息中可以找到其他支持的RemoteFX USB设备，一般来说可以全都勾选上。</li>
+</ol>
+<h3 id="声音流畅度优化">声音流畅度优化</h3>
+<ol>
+<li>首先打开远程主机上的组策略（Win+R打开运行，输入gpedit.msc）<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup>。</li>
+<li>依次找到 计算机配置 - 管理模板 - Windows 组件 - 远程桌面服务 - 远程桌面会话主机 - 设备和资源重定向。<br>
+<img src="https://fbwenoll.eu.org/post-images/1682792221539.webp" alt="限制音频播放质量" loading="lazy"></li>
+<li>双击打开 限制音频播放质量，打开 已启用，然后根据网络情况选择音频质量。</li>
+<li><code>win+R</code>运行<code>gpupdate /force</code>重新加载策略组。就此，服务端已设置完毕。</li>
+<li>客户端中打开mstsc，显示-&gt;颜色-&gt;16位色深；体验-&gt;调制解调器(56 kbps)，输入被控端虚拟ip地址。将配置文件另存为桌面。<br>
+<img src="https://fbwenoll.eu.org/post-images/1682792540068.png" alt="mstsc" loading="lazy"></li>
+<li>以记事本方式打开该文件，并在末尾添加:</li>
+</ol>
+<pre><code>set audioqualitymode:i:2 
+</code></pre>
+<ol start="7">
+<li>在后续连接时，直接打开该.rdp文件即可。</li>
+</ol>
+<blockquote>
+<p>据<sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup>，图形首选项中将两台电脑的声卡设置为高性能也可改善音频延迟的情况。</p>
+</blockquote>
+<h2 id="3其它设置">（3）其它设置</h2>
+<p>由于作者试图从关机到控制完全远程实现，因此还需一些额外设置。例如：TailScale作为Windows软件，在首次开机锁屏密码输入前它并不会运行（设置开机自启也不会在输入密码前运行），这使得我们的TailScale在登陆账户前无法生效。但我们只能在TailScale虚拟局域网下才能实现远程操作输入密码，陷入死循环。<br>
+这里通过Windows任务计划程序来实现TailScale服务自启<sup class="footnote-ref"><a href="#fn4" id="fnref4">[4]</a></sup>。</p>
+<ol>
+<li><code>win+R</code>输入<code>control</code>打开控制面板，在搜索栏中搜索“计划任务”并打开。</li>
+<li>选择创建任务，在名称中输入“TailScale开机自启”,下方勾选“不管用户是否登陆都要运行”。<br>
+<img src="https://fbwenoll.eu.org/post-images/1682835851092.png" alt="计划任务" loading="lazy"></li>
+<li>在触发器-&gt;新建-&gt;开始任务中选择“启动时”。<br>
+<img src="https://fbwenoll.eu.org/post-images/1682835963112.png" alt="触发器" loading="lazy"></li>
+<li>在操作中绑定应用程序，程序选择TailScale安装地址中的<code>tailscale-ipn.exe</code>。<br>
+<img src="https://fbwenoll.eu.org/post-images/1682836053326.png" alt="操作" loading="lazy"></li>
+<li>最后，在条-&gt;网络中一栏勾选“只有在以下网络连接可用时才启动”并选择“任何连接”。<br>
+<img src="https://fbwenoll.eu.org/post-images/1682836193172.png" alt="网络" loading="lazy"></li>
+</ol>
+<h1 id="二-wake-on-lan设置">二、Wake On Lan设置</h1>
+<h2 id="1wake-on-lan-主板设置">（1）Wake On Lan 主板设置</h2>
+<ol>
+<li>在BIOS中打开<code>Wake On Lan</code>相关设置<sup class="footnote-ref"><a href="#fn5" id="fnref5">[5]</a></sup>。</li>
+<li>被控端网卡驱动里需要设置开启WOL相关选项。<br>
+无线网卡一般不支持wol，有线网卡大部分支持。在设备管理器中找到支持wol唤醒的网卡设备，右键选择「属性」，然后在「电源管理」里面开启「允许此设备唤醒计算机」，然后在「高级」一栏里找到「唤醒魔包」并「启用」。<br>
+<img src="https://fbwenoll.eu.org/post-images/1682838872231.png" alt="允许唤醒" loading="lazy"><br>
+<img src="https://fbwenoll.eu.org/post-images/1682838793154.png" alt="唤醒魔包" loading="lazy"></li>
+<li>关闭快速启动<br>
+<img src="https://fbwenoll.eu.org/post-images/1682838946895.png" alt="快速启动" loading="lazy"></li>
+</ol>
+<h2 id="2todesk方法">（2）ToDesk方法</h2>
+<p>这里参考<a href="https://www.todesk.com/faq/57.html">ToDesk的官方教程</a>，使用较简单，但是该方案有如下缺点：</p>
+<ul>
+<li>需要被控端开机自启ToDesk，与此同时被控端局域网下需要有另一台<code>linux/ios/mac/win/android</code>设备登陆ToDesk并始终在线。</li>
+</ul>
+<h2 id="3linux唤醒">（3）linux唤醒</h2>
+<p>作者的使用场景为：Surface在寝室中远程控制实验室的笔记本电脑，实验室局域网下还有配有TailScale的linux服务器。因此作者使用同局域网下的linux搭配etherwake软件包实现windows设备的WakeOnLan<sup class="footnote-ref"><a href="#fn6" id="fnref6">[6]</a></sup>。</p>
+<ol>
+<li>首先通过<code>sudo apt-get update &amp;&amp; sudo apt install etherwake</code>安装软件包。</li>
+<li>安装完成后即可通过<code>etherwake AA:BB:CC:DD:EE:FF</code>实现windows设备的远程开机。其中<code>AA:BB:CC:DD:EE:FF</code>为windows的MAC地址。</li>
+</ol>
+<h3 id="shell脚本">shell脚本</h3>
+<p>尽管etherwake是一个很方便的工具，但是每次远程开机都需要输入MAC地址未免有些麻烦，因此在这里作者选择编写一个很简单的<code>bash</code>脚本来简化该命令。</p>
+<ol>
+<li>编写脚本
+<ul>
+<li>创建脚本文件，命名为<code>wol</code>：</li>
+</ul>
+<pre><code class="language-shell">sudo vim wol
+</code></pre>
+<ul>
+<li>在<code>wol</code>中添加如下命令<sup class="footnote-ref"><a href="#fn7" id="fnref7">[7]</a></sup>：</li>
+</ul>
+<pre><code class="language-shell">#！/bin/zsh
+
+echo 管理员密码 | sudo -S etherwake
+
+echo 'Wake On Lan......OK!'
+
+</code></pre>
+<ul>
+<li><code>esc</code>-&gt;<code>:</code>-&gt;<code>wq</code>进行保存。</li>
+</ul>
+</li>
+<li>给予权限<sup class="footnote-ref"><a href="#fn8" id="fnref8">[8]</a></sup><br>
+在上述脚本所在文件夹中执行以下命令：<pre><code class="language-shell">sudo chmod 777 wol
+sudo chmod +x wol
+</code></pre>
+</li>
+<li>添加环境变量<sup class="footnote-ref"><a href="#fn9" id="fnref9">[9]</a></sup>
+<ul>
+<li>通过<code>sudo vim /.~zshrc</code>打开<code>zsh</code>配置文件。（如果用bash则打开~/.bashrc）</li>
+<li>在末尾添加<code>export PATH=$PATH:/home/fbwenoll</code>。其中<code>/home/fbwenoll</code>为上述wol文件所处的目录。</li>
+</ul>
+</li>
+</ol>
+<h2 id="4-物联网方法mqtt">（4） 物联网方法MQTT</h2>
+<p>此外也可以通过ESP32/ESP8266一类带有WiFi功能的MCU实现计算机的WOL，这里提供两个链接供参考。</p>
+<ol>
+<li><a href="https://www.bilibili.com/video/BV1JX4y1V7mi/?spm_id_from=333.337.search-card.all.click">MQTT Broker</a></li>
+<li><a href="https://blog.csdn.net/m0_37624610/article/details/108196206">Blinker</a></li>
+</ol>
+<h1 id="其它">其它</h1>
+<p>由于作者使用Ubuntu+windows11双系统，当开机时会先进入grub引导来选择要进入的系统(默认为ubuntu)。因此还要将win11设置为grub默认开机选项。这里提供一篇博客供参考<sup class="footnote-ref"><a href="#fn10" id="fnref10">[10]</a></sup>。</p>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>https://blog.csdn.net/csdn_life18/article/details/108250846#RemoteFX_USB_64 <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p>https://www.bilibili.com/read/cv4421723/ <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn3" class="footnote-item"><p>https://www.zhihu.com/question/406412942 <a href="#fnref3" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn4" class="footnote-item"><p>https://www.zhihu.com/question/43325335 <a href="#fnref4" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn5" class="footnote-item"><p>https://www.todesk.com/faq/57.html <a href="#fnref5" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn6" class="footnote-item"><p>https://www.jianshu.com/p/ea09ec4d4867 <a href="#fnref6" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn7" class="footnote-item"><p>https://blog.csdn.net/Britripe/article/details/114081200 <a href="#fnref7" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn8" class="footnote-item"><p>https://blog.csdn.net/niuxikun/article/details/108996733 <a href="#fnref8" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn9" class="footnote-item"><p>https://blog.csdn.net/m0_46278037/article/details/120457468 <a href="#fnref9" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn10" class="footnote-item"><p>https://blog.csdn.net/weixin_41683971/article/details/105199558 <a href="#fnref10" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://fbwenoll.eu.org/tag/qiSFRmD1I/" class="tag">
+                    远程桌面
+                  </a>
+                
+                  <a href="https://fbwenoll.eu.org/tag/RtPZU3WmM/" class="tag">
+                    Windows
+                  </a>
+                
+                  <a href="https://fbwenoll.eu.org/tag/gkSbTsQEt/" class="tag">
+                    Linux
+                  </a>
+                
+                  <a href="https://fbwenoll.eu.org/tag/6GDr42jDJ/" class="tag">
+                    踩坑记录
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://fbwenoll.eu.org/post/shi-yong-gridea-pei-he-nginx-da-jian-ben-di-fu-wu-qi-bo-ke/">
+                  <h3 class="post-title">
+                    使用Gridea配合Nginx搭建本地服务器博客
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+
+  </body>
+</html>
